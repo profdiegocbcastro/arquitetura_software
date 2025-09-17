@@ -1,0 +1,19 @@
+{
+  "name": "simples-grpc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "server": "node src/server.js",
+    "clientFibo": "node src/clientFibo.js",
+    "clientSum": "node src/clientSum.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.13.4",
+    "@grpc/proto-loader": "^0.8.0"
+  }
+}

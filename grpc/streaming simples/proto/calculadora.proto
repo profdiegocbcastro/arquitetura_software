@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package calculadoraPackage;
+
+service Calculadora {
+  rpc getFibonacci (Contador) returns (stream Resposta);
+  rpc sendNumbers (stream Contador) returns (Resposta);
+}
+
+message Contador {
+  int32 count = 1;
+}
+
+message Resposta {
+  int32 number = 1;
+}

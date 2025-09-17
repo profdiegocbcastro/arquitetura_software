@@ -1,0 +1,17 @@
+{
+  "name": "exemplo-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:problema": "npx ts-node problema.ts",
+    "start:solucao": "npx ts-node solucao.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

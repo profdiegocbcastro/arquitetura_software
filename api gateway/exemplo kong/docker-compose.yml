@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  kong:
+    image: kong:latest
+    container_name: kong_api_gateway
+    restart: always
+    networks:
+      - subnet
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      KONG_DATABASE: "off"
+      KONG_PROXY_LISTEN: "0.0.0.0:8000"
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001"
+      KONG_DECLARATIVE_CONFIG: "/usr/local/kong/declarative/kong.yml"
+    volumes:
+      - ./kong.yml:/usr/local/kong/declarative/kong.yml
+
+networks:
+  subnet:
+    driver: bridge
