@@ -1,0 +1,21 @@
+{
+  "name": "service-2",
+  "version": "1.0.0",
+  "description": "Serviço de exemplo com OpenTelemetry e Jaeger",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.66.0",
+    "@opentelemetry/exporter-jaeger": "^2.2.0",
+    "@opentelemetry/sdk-node": "^0.207.0",
+    "@opentelemetry/sdk-trace-base": "^2.2.0",
+    "axios": "^1.12.2",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "jaeger-client": "^3.19.0",
+    "opentracing": "^0.14.7"
+  }
+}
