@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Context.puml
+
+' Sistema principal
+System(salesSystem, "Sistema de Vendas", "Gerencia pedidos, clientes e produtos")
+
+' Atores externos
+Person(customer, "Cliente", "Compra produtos online")
+Person(salesRep, "Representante de Vendas", "Gerencia pedidos e clientes")
+
+' Sistemas externos
+System_Ext(paymentGateway, "Gateway de Pagamento", "Processa pagamentos")
+System_Ext(shippingService, "Serviço de Entrega", "Gerencia logística de entrega de pedidos")
+System_Ext(emailService, "Servidor de Email", "Envia notificações aos clientes")
+
+' Relacionamentos
+Rel(customer, salesSystem, "Realiza pedidos usando")
+Rel(salesRep, salesSystem, "Gerencia pedidos e clientes via portal interno")
+Rel(salesSystem, paymentGateway, "Processa pagamentos via API")
+Rel(salesSystem, shippingService, "Solicita entregas via API")
+Rel(salesSystem, emailService, "Envia notificações de pedido e entrega")
+Rel(emailService, customer, "Envia notificações de pedidos e entregas")
+
+
+@enduml

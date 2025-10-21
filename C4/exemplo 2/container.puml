@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+AddRelTag("async, $lineStyle=dashed")
+
+' Sistema principal
+System_Boundary(ticketSystem, "Sistema de Venda de Ingressos") {
+
+    ' Containers internos
+    Container(webApp, "Aplicação Web", "React / Angular", "Interface para compra e consulta de ingressos")
+    Container(cache, "Cache de Ingressos", "Redis / Memcached", "Consulta disponibilidade de ingressos antes de bater na API")
+    Container(api, "API de Ingressos", "Node.js / Spring Boot", "Gerencia pedidos, pagamentos e confirmações")
+    Container(db, "Banco de Dados", "PostgreSQL", "Armazena informações de usuários, ingressos e vendas")
+    Container(emailQueue, "Fila de Emails", "RabbitMQ / Kafka", "Gerencia envio de confirmações de compra")
+    Container(queueAccess, "Fila Virtual de Compra", "Redis / Kafka", "Controla ordem de acesso às requisições de compra")
+}
+
+' Sistemas externos
+System_Ext(paymentGateway, "Gateway de Pagamento", "Processa pagamentos de ingressos")
+System_Ext(emailService, "Servidor de Email", "Envia confirmações de compra")
+
+' Atores externos
+Person(attendee, "Fã / Participante", "Compra ingressos online")
+
+' Relacionamentos
+Rel(attendee, webApp, "Acessa site para comprar ingressos")
+Rel(webApp, queueAccess, "Entra na fila virtual de compra")
+Rel(queueAccess, webApp, "Libera acesso à requisição de compra quando disponível")
+Rel(webApp, cache, "Consulta disponibilidade antes de enviar requisição")
+Rel(cache, api, "Chama API para efetivar compra")
+Rel(api, cache, "Atualiza cache")
+Rel(api, db, "Lê e grava dados de usuários, ingressos e vendas")
+Rel(api, paymentGateway, "Processa pagamentos")
+Rel(api, emailQueue, "Coloca mensagem de confirmação de compra")
+Rel(emailQueue, emailService, "Envia emails para os clientes")
+Rel(emailService, attendee, "Entrega emails com confirmação de compra")
+
+@enduml

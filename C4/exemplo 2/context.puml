@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Context.puml
+
+' Sistema principal
+System(ticketSystem, "Sistema de Venda de Ingressos", "Gerencia venda e distribuição de ingressos do Rock in Rio")
+
+' Atores externos
+Person(attendee, "Fã / Participante", "Compra ingressos online")
+Person(ticketAgent, "Agente de Vendas", "Gerencia ingressos e consulta vendas")
+
+' Sistemas externos
+System_Ext(paymentGateway, "Gateway de Pagamento", "Processa pagamentos de ingressos")
+System_Ext(emailService, "Servidor de Email", "Envia confirmações e ingressos digitais")
+
+' Relacionamentos
+Rel(attendee, ticketSystem, "Compra ingressos via site ou app")
+Rel(ticketAgent, ticketSystem, "Consulta e gerencia vendas")
+Rel(ticketSystem, paymentGateway, "Processa pagamentos via API")
+Rel(ticketSystem, emailService, "Envia ingressos digitais e confirmações")
+Rel(emailService, attendee, "Entrega ingressos digitais")
+
+@enduml

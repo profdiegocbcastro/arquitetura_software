@@ -1,0 +1,33 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+
+' Sistema principal
+System_Boundary(salesSystem, "Sistema de Vendas") {
+
+    ' Containers internos
+    Container(webApp, "Aplicação Web", "React / Angular", "Interface usada por clientes e representantes de vendas")
+    Container(api, "API de Vendas", "Node.js / Spring Boot", "Expõe endpoints para gerenciar pedidos, clientes e produtos")
+    Container(db, "Banco de Dados", "PostgreSQL", "Armazena informações de clientes, pedidos e produtos")
+}
+
+' Atores externos
+Person(customer, "Cliente", "Compra produtos online")
+Person(salesRep, "Representante de Vendas", "Gerencia pedidos e clientes")
+
+' Sistemas externos
+System_Ext(paymentGateway, "Gateway de Pagamento", "Processa pagamentos")
+System_Ext(shippingService, "Serviço de Entrega", "Gerencia logística de entrega de pedidos")
+System_Ext(emailService, "Servidor de Email", "Envia notificações aos clientes")
+
+' Relacionamentos
+Rel(customer, webApp, "Usa")
+Rel(salesRep, webApp, "Usa portal interno")
+Rel(webApp, api, "Chama API para pedidos, clientes e produtos")
+Rel(api, db, "Lê e grava dados")
+Rel(api, paymentGateway, "Processa pagamentos via API")
+Rel(api, shippingService, "Solicita entregas via API")
+Rel(api, emailService, "Envia notificações de pedidos e entregas")
+Rel(emailService, customer, "Envia notificações de pedidos e entregas")
+
+
+@enduml
