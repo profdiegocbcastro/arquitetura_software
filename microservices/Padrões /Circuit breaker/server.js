@@ -5,7 +5,7 @@ app.get('/healthcheck', (req, res) => {
     res.json({status: 'ok'});
 });
 
-const port = 3000;
+const port = 3002;
 
 app.listen(port, function () {
     console.log(`http://localhost:${port}/healthcheck`);

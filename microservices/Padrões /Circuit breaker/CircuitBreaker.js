@@ -19,7 +19,7 @@ const CircuitBreaker = () => {
             }
 
             try {
-                const port = 3001;
+                const port = 3003;
                 const response = await fetch(`http://localhost:${port}/healthcheck`);
                 const json = await response.json();
 
