@@ -1,0 +1,8 @@
+{
+   "name": "kafka-consumer",
+   "version": "1.0.0",
+   "main": "index.js",
+   "dependencies": {
+      "kafkajs": "^2.1.0"
+   }
+}
