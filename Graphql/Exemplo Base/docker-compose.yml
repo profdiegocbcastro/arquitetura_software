@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+
+  # =========================================================
+  # Container do Banco de Dados
+  # =========================================================
+  #
+  # Este serviço executa um servidor PostgreSQL.
+  #
+  # A aplicação GraphQL irá se conectar a este container
+  # para ler e escrever dados na tabela "books".
+  #
+  db:
+    image: postgres:15
+    container_name: biblioteca_db
+
+    # Reinicia automaticamente se o container parar
+    restart: unless-stopped
+
+    environment:
+      # Nome do banco de dados que será criado automaticamente
+      POSTGRES_DB: biblioteca
+
+      # Usuário administrador do banco
+      POSTGRES_USER: postgres
+
+      # Senha do usuário do banco
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      # Expõe a porta do PostgreSQL no host
+      # host:container
+      - "5432:5432"
+
+    volumes:
+      # Volume persistente para armazenar os dados do banco
+      # Assim os dados não são perdidos ao reiniciar o container
+      - pgdata:/var/lib/postgresql/data
+
+      # Script SQL executado automaticamente na primeira inicialização
+      # Responsável por criar a tabela "books"
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+
+
+  # =========================================================
+  # Container da API GraphQL
+  # =========================================================
+  #
+  # Este serviço executa a aplicação Node.js que contém
+  # o servidor GraphQL.
+  #
+  api:
+    build: .
+    container_name: biblioteca_api
+
+    restart: unless-stopped
+
+    # Garante que o container do banco seja iniciado primeiro
+    depends_on:
+      - db
+
+    environment:
+      # Porta onde o servidor GraphQL irá rodar
+      PORT: 4000
+
+      # Configurações de conexão com o banco
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: biblioteca
+
+    ports:
+      # Expõe a API GraphQL para o host
+      - "4000:4000"
+
+
+
+# =========================================================
+# Volume Docker
+# =========================================================
+#
+# Volume utilizado pelo PostgreSQL para persistência de dados.
+# Mesmo que o container seja recriado, os dados permanecem.
+#
+volumes:
+  pgdata:

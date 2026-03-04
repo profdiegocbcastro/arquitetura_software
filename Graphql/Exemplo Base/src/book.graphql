@@ -1,0 +1,74 @@
+# =========================================================
+# Schema GraphQL - Biblioteca
+#
+# Este arquivo define o CONTRATO da API GraphQL.
+# Aqui descrevemos:
+#
+# • Quais tipos de dados existem
+# • Quais consultas (queries) podem ser feitas
+# • Quais operações de escrita (mutations) existem
+# =========================================================
+
+
+
+# =========================================================
+# Tipo Book
+#
+# Representa um livro armazenado no banco de dados.
+#
+# Cada campo possui um tipo específico.
+# O símbolo "!" significa que o campo é obrigatório.
+# =========================================================
+
+type Book {
+
+  # Identificador único do livro
+  id: ID!
+
+  # Título do livro
+  title: String!
+
+  # Nome do autor
+  author: String!
+
+  # Indica se o livro está disponível
+  available: Boolean!
+}
+
+
+
+# =========================================================
+# Queries
+#
+# Queries são usadas para CONSULTAR dados.
+#
+# Elas são equivalentes a operações GET em APIs REST.
+# =========================================================
+
+type Query {
+
+  # Retorna a lista de todos os livros cadastrados
+  books: [Book]
+
+}
+
+
+
+# =========================================================
+# Mutations
+#
+# Mutations são usadas para ALTERAR dados.
+#
+# Elas são equivalentes a operações POST / PUT / DELETE
+# em APIs REST.
+# =========================================================
+
+type Mutation {
+
+  # Cria um novo livro no banco de dados
+  addBook(
+    title: String!
+    author: String!
+  ): Book
+
+}
