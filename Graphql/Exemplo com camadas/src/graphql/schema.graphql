@@ -1,0 +1,11 @@
+# =========================================================
+# Arquivo base do schema.
+#
+# Quando dividimos o schema em múltiplos arquivos,
+# precisamos declarar os tipos raiz:
+# - Query
+# - Mutation
+# =========================================================
+
+type Query
+type Mutation

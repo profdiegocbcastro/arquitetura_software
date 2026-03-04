@@ -19,7 +19,7 @@ PostgreSQL
 # Estrutura do projeto
 
 ```
-exemplo1-diretobanco-graphql
+Exemplo Base
 │
 ├─ docker-compose.yml
 ├─ Dockerfile

@@ -1,20 +1,25 @@
 # =========================================================
 # Imagem Base
 # =========================================================
-FROM node:20-alpine
+#
+# Utilizamos Node.js 20 baseado em Debian (bookworm-slim).
+#
+# Motivos:
+# - Melhor compatibilidade com Prisma
+# - Suporte a bibliotecas nativas usadas pelo ORM
+# - Imagem relativamente leve
+#
+FROM node:20-bookworm-slim
 
 # =========================================================
 # Diretório de Trabalho
 # =========================================================
 #
-# Define o diretório padrão onde todos os comandos
-# seguintes serão executados dentro do container.
-#
-# Toda a aplicação ficará dentro de:
-#
-# /app
+# Define o diretório onde a aplicação será executada
+# dentro do container.
 #
 WORKDIR /app
+
 
 # =========================================================
 # Instalação de Dependências
@@ -46,22 +51,29 @@ RUN npm ci
 # Copiando o Código da Aplicação
 # =========================================================
 #
-# Após instalar as dependências copiamos apenas
-# o código-fonte da aplicação.
+# Copia todos os arquivos do projeto para dentro
+# do container.
 #
-# Nesse exemplo estamos copiando apenas a pasta src,
-# onde está o servidor GraphQL.
+COPY . .
+
+# =========================================================
+# Geração do Prisma Client
+# =========================================================
 #
-COPY src ./src
+# O Prisma gera um ORM client baseado no arquivo:
+#
+# prisma/schema.prisma
+#
+# Esse client será utilizado pelos repositories
+# para acessar o banco de dados.
+#
+RUN npx prisma generate
 
 # =========================================================
 # Porta da Aplicação
 # =========================================================
 #
-# Informa ao Docker que a aplicação expõe a porta 4000.
-#
-# Essa porta será usada pelo servidor Node.js
-# para receber requisições HTTP / GraphQL.
+# A aplicação GraphQL roda na porta 4000.
 #
 EXPOSE 4000
 
@@ -69,12 +81,10 @@ EXPOSE 4000
 # Inicialização do Container
 # =========================================================
 #
-# Quando o container iniciar, o Docker executará
-# o comando abaixo.
+# Quando o container inicia:
 #
-# Nesse caso estamos iniciando diretamente
-# o arquivo principal da aplicação Node.js.
+# 1) Prisma sincroniza o banco (db push)
+# 2) Executa o seed para popular dados iniciais
+# 3) Inicia o servidor Node.js
 #
-# src/index.js
-#
-CMD ["node", "src/index.js"]
+CMD sh -c "npx prisma db push && node prisma/seed.js && npm start"

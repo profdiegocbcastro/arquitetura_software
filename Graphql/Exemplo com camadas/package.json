@@ -1,0 +1,27 @@
+{
+  "name": "exemplo-com-orm",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:studio": "prisma studio",
+
+    "seed": "node prisma/seed.js",
+    "db:setup": "npm run prisma:generate && npm run prisma:migrate:dev && npm run seed"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.11.0",
+    "@graphql-tools/schema": "^10.0.0",
+    "@prisma/client": "^6.0.0",
+    "express": "^4.19.2",
+    "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.0.0"
+  }
+}

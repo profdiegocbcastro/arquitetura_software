@@ -1,0 +1,39 @@
+/**
+ * Prisma Schema
+ *
+ * Esse arquivo é o "contrato" do ORM.
+ * Em vez de escrever SQL manualmente,
+ * você modela as entidades aqui e o Prisma:
+ * - gera o cliente (API em JS/TS)
+ * - cria migrations
+ * - mantém o banco consistente
+ */
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Author {
+  id    Int    @id @default(autoincrement())
+  name  String
+
+  books Book[]
+
+  @@map("authors")
+}
+
+model Book {
+  id        Int     @id @default(autoincrement())
+  title     String
+  available Boolean @default(true)
+
+  authorId  Int     @map("author_id")
+  author    Author  @relation(fields: [authorId], references: [id])
+
+  @@map("books")
+}

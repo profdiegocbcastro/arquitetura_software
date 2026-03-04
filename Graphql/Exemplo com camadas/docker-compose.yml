@@ -1,3 +1,4 @@
+version: "3.9"
 
 services:
 
@@ -7,8 +8,8 @@ services:
   #
   # Este serviço executa um servidor PostgreSQL.
   #
-  # A aplicação GraphQL irá se conectar a este container
-  # para ler e escrever dados na tabela "books".
+  # A aplicação GraphQL (com Prisma ORM) irá se conectar
+  # a este container para ler e escrever dados.
   #
   db:
     image: postgres:15
@@ -37,18 +38,16 @@ services:
       # Assim os dados não são perdidos ao reiniciar o container
       - pgdata:/var/lib/postgresql/data
 
-      # Script SQL executado automaticamente na primeira inicialização
-      # Responsável por criar a tabela "books"
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-
-
-
   # =========================================================
   # Container da API GraphQL
   # =========================================================
   #
   # Este serviço executa a aplicação Node.js que contém
-  # o servidor GraphQL.
+  # o servidor GraphQL (Apollo Server).
+  #
+  # Neste exemplo (ORM):
+  # - A aplicação usa Prisma para acessar o banco
+  # - As migrations do Prisma precisam ser aplicadas no banco
   #
   api:
     build: .
@@ -64,18 +63,15 @@ services:
       # Porta onde o servidor GraphQL irá rodar
       PORT: 4000
 
-      # Configurações de conexão com o banco
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: biblioteca
+      # String de conexão utilizada pelo Prisma
+      # Importante:
+      # - host "db" é o nome do serviço do PostgreSQL no compose
+      # - schema=public é o padrão do PostgreSQL
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/biblioteca?schema=public
 
     ports:
       # Expõe a API GraphQL para o host
       - "4000:4000"
-
-
 
 # =========================================================
 # Volume Docker
