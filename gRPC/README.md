@@ -39,6 +39,25 @@ grpc
 |           |-- Service.js
 |           `-- Implementation.js
 |
+|-- Exemplo API em Camadas
+|   |-- proto
+|   |   `-- orderApi.proto
+|   `-- src
+|       |-- client.js
+|       |-- server.js
+|       |-- database
+|       |   |-- catalogDatabase.js
+|       |   `-- orderDatabase.js
+|       |-- product
+|       |   `-- productRepository.js
+|       |-- shared
+|       |   |-- applicationError.js
+|       |   `-- toGrpcError.js
+|       `-- order
+|           |-- orderController.js
+|           |-- orderRepository.js
+|           `-- orderService.js
+|
 |-- Streaming Simples
 |   |-- proto
 |   |   `-- calculadora.proto
@@ -91,6 +110,28 @@ Esse exemplo é útil para enxergar a diferença entre:
 
 ---
 
+## Exemplo API em Camadas
+
+Apresenta um caso unary mais próximo de uma API de negócio.
+
+O serviço modela um fluxo de pedidos com:
+
+- criação de pedido
+- consulta por ID
+- listagem por cliente
+- atualização de status
+- validação de entrada
+- mapeamento de erros para códigos gRPC
+
+Também amplia a separação em camadas:
+
+- **Controller**: adaptação entre gRPC e a aplicação
+- **OrderService**: regras de negócio e transições de status
+- **OrderRepository**: acesso ao `orderDatabase`
+- **ProductRepository**: acesso ao `catalogDatabase`
+
+---
+
 ## Chat Streaming
 
 Apresenta **streaming bidirecional**.
@@ -127,6 +168,11 @@ npm run client
 ```bash
 cd "gRPC/Streaming Simples"
 npm run clientFibo
+```
+
+```bash
+cd "gRPC/Exemplo API em Camadas"
+npm run client
 ```
 
 ```bash
