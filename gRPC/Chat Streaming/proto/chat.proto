@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package chatPackage;
+
+// Contrato do chat bidirecional.
+//
+// Cliente e servidor mantêm o stream aberto para
+// enviar e receber mensagens continuamente.
+service Chat {
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+// Mensagem trafegada entre os participantes do chat.
+message ChatMessage {
+  string user = 1;
+  string message = 2;
+}

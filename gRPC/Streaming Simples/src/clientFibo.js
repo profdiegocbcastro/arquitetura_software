@@ -2,6 +2,13 @@ import grpc from '@grpc/grpc-js';
 import protoLoader from '@grpc/proto-loader';
 import path from 'path';
 
+/**
+ * Cliente de server streaming.
+ *
+ * Envia uma requisição única para o servidor e
+ * recebe vários eventos de resposta ao longo do tempo.
+ */
+
 const packageDefinition = protoLoader.loadSync(
   path.join(process.cwd(), 'proto/calculadora.proto'),
   {}
@@ -14,15 +21,17 @@ function main() {
     grpc.credentials.createInsecure()
   );
 
-  const call = client.sendNumbers((err, response) => {
+  // O retorno é um stream de leitura.
+  const call = client.getFibonacci({count: 10});
+
+  call.on('data', (response) => {
     console.log(response.number)
   });
 
-  call.write({count: 1});
-  call.write({count: 2});
-  call.write({count: 3});
-
-  call.end();
+  // O evento "end" indica que o servidor concluiu o envio.
+  call.on('end', () => {
+    console.log("Finalizou")
+  })
 }
 
 main();

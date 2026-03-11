@@ -3,6 +3,7 @@ export class BookService {
       this.bookDatasource = bookDatasource;
     }
 
+    // Centraliza a regra da aplicação antes de acessar a persistência.
     createBook(bookData) {
       return this.bookDatasource.createBook(bookData);
     }

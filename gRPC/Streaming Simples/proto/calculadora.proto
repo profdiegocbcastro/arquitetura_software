@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package calculadoraPackage;
+
+// Contrato do exemplo de streaming.
+//
+// Aqui aparecem dois estilos diferentes:
+// - server streaming
+// - client streaming
+service Calculadora {
+  // "returns (stream Resposta)" indica que a resposta é um stream.
+  // Isso significa que o servidor pode enviar várias mensagens
+  // do tipo Resposta para uma única requisição do cliente.
+  //
+  // Neste método:
+  // - o cliente envia um único Contador
+  // - o servidor responde com vários valores de Fibonacci
+  rpc getFibonacci (Contador) returns (stream Resposta);
+
+  // "stream Contador" indica que a requisição é um stream.
+  // Isso significa que o cliente pode enviar várias mensagens
+  // do tipo Contador antes do encerramento da chamada.
+  //
+  // Neste método:
+  // - o cliente envia vários números
+  // - o servidor devolve uma única Resposta com a soma total
+  rpc sendNumbers (stream Contador) returns (Resposta);
+}
+
+// Número enviado pelo cliente ao servidor.
+message Contador {
+  int32 count = 1;
+}
+
+// Resposta simples contendo um número inteiro.
+message Resposta {
+  int32 number = 1;
+}

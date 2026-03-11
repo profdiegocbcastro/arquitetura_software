@@ -1,0 +1,33 @@
+syntax = 'proto3';
+
+package bookStorePackage;
+
+// Contrato gRPC da aplicação.
+//
+// Este exemplo utiliza apenas unary RPC:
+// - o cliente envia uma requisição
+// - o servidor retorna uma única resposta
+service Book {
+    rpc createBook (BookItem) returns (BookItem);
+    rpc readBook (BookRequest) returns (BookItem);
+    rpc readBooks (Empty) returns (BooksList);
+}
+
+// Representa um livro trafegando entre cliente e servidor.
+message BookItem {
+    int32 id = 1;
+    string book = 2;
+}
+
+// Mensagem utilizada para buscar um livro específico pelo ID.
+message BookRequest {
+    int32 id = 1;
+}
+
+// Lista de livros retornada pelo servidor.
+message BooksList {
+    repeated BookItem books = 1;
+}
+
+// Mensagem vazia usada quando a operação não precisa de parâmetros.
+message Empty {}
