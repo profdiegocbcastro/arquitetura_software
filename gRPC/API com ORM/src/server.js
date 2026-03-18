@@ -1,0 +1,71 @@
+import grpc from "@grpc/grpc-js";
+import protoLoader from "@grpc/proto-loader";
+import path from "node:path";
+
+import { AuthorRepository } from "./author/authorRepository.js";
+import { AuthorService } from "./author/authorService.js";
+import { BookRepository } from "./book/bookRepository.js";
+import { BookService } from "./book/bookService.js";
+import { getLibraryController } from "./library/libraryController.js";
+import { prisma } from "./prisma.js";
+
+/**
+ * =========================================================
+ * Arquivo principal do servidor gRPC
+ * =========================================================
+ *
+ * Fluxo do exemplo:
+ *
+ * gRPC -> Controller -> Service -> Repository -> Prisma -> PostgreSQL
+ */
+
+const server = new grpc.Server();
+
+/**
+ * ===============================
+ * 1) Montando as camadas da aplicação
+ * ===============================
+ */
+const authorRepository = new AuthorRepository(prisma);
+const bookRepository = new BookRepository(prisma);
+
+const authorService = new AuthorService(authorRepository);
+const bookService = new BookService(bookRepository, authorRepository);
+
+const libraryController = getLibraryController(authorService, bookService);
+
+/**
+ * ===============================
+ * 2) Carregando o contrato .proto
+ * ===============================
+ */
+const packageDefinition = protoLoader.loadSync(
+  path.join(process.cwd(), "proto/libraryApi.proto"),
+  {}
+);
+const libraryPackage = grpc.loadPackageDefinition(packageDefinition).libraryPackage;
+
+/**
+ * ===============================
+ * 3) Registrando o servico no servidor
+ * ===============================
+ */
+server.addService(libraryPackage.LibraryApi.service, libraryController);
+
+/**
+ * ===============================
+ * 4) Publicando o servidor na porta 50051
+ * ===============================
+ */
+server.bindAsync(
+  "0.0.0.0:50051",
+  grpc.ServerCredentials.createInsecure(),
+  (err, port) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    console.log(`Servidor gRPC da biblioteca com Prisma escutando em 127.0.0.1:${port}`);
+  }
+);

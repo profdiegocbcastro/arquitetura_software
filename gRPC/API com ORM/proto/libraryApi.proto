@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package libraryPackage;
+
+// =========================================================
+// Contrato gRPC da biblioteca
+// =========================================================
+
+service LibraryApi {
+  rpc ListAuthors (Empty) returns (AuthorsListResponse);
+  rpc GetAuthor (GetAuthorRequest) returns (AuthorResponse);
+  rpc AddAuthor (AddAuthorRequest) returns (AuthorResponse);
+
+  rpc ListBooks (Empty) returns (BooksListResponse);
+  rpc GetBook (GetBookRequest) returns (BookResponse);
+  rpc ListBooksByAuthor (ListBooksByAuthorRequest) returns (BooksListResponse);
+  rpc AddBook (AddBookRequest) returns (BookResponse);
+}
+
+message Empty {}
+
+message GetAuthorRequest {
+  int32 author_id = 1;
+}
+
+message AddAuthorRequest {
+  string name = 1;
+}
+
+message GetBookRequest {
+  int32 book_id = 1;
+}
+
+message ListBooksByAuthorRequest {
+  int32 author_id = 1;
+}
+
+message AddBookRequest {
+  string title = 1;
+  int32 author_id = 2;
+  bool available = 3;
+}
+
+message AuthorResponse {
+  int32 author_id = 1;
+  string name = 2;
+}
+
+message BookResponse {
+  int32 book_id = 1;
+  string title = 2;
+  bool available = 3;
+  AuthorResponse author = 4;
+}
+
+message AuthorsListResponse {
+  repeated AuthorResponse authors = 1;
+}
+
+message BooksListResponse {
+  repeated BookResponse books = 1;
+}

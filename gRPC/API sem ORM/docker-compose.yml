@@ -1,0 +1,27 @@
+services:
+  # =========================================================
+  # Container do Banco de Dados
+  # =========================================================
+  #
+  # Este exemplo usa Docker apenas para subir o PostgreSQL.
+  # O servidor gRPC continua rodando localmente com Node.js.
+  #
+  db:
+    image: postgres:15
+    container_name: grpc_library_db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: grpc_library
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - grpc_library_pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  grpc_library_pgdata:

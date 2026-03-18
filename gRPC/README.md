@@ -58,6 +58,44 @@ grpc
 |           |-- orderRepository.js
 |           `-- orderService.js
 |
+|-- Exemplo PostgreSQL sem ORM
+|   |-- db
+|   |   `-- init.sql
+|   |-- proto
+|   |   `-- libraryApi.proto
+|   `-- src
+|       |-- client.js
+|       |-- server.js
+|       |-- database
+|       |   `-- postgres.js
+|       |-- author
+|       |   |-- authorRepository.js
+|       |   `-- authorService.js
+|       |-- book
+|       |   |-- bookRepository.js
+|       |   `-- bookService.js
+|       `-- library
+|           `-- libraryController.js
+|
+|-- Exemplo PostgreSQL com Prisma
+|   |-- prisma
+|   |   |-- schema.prisma
+|   |   `-- seed.js
+|   |-- proto
+|   |   `-- libraryApi.proto
+|   `-- src
+|       |-- client.js
+|       |-- server.js
+|       |-- prisma.js
+|       |-- author
+|       |   |-- authorRepository.js
+|       |   `-- authorService.js
+|       |-- book
+|       |   |-- bookRepository.js
+|       |   `-- bookService.js
+|       `-- library
+|           `-- libraryController.js
+|
 |-- Streaming Simples
 |   |-- proto
 |   |   `-- calculadora.proto
@@ -65,6 +103,26 @@ grpc
 |       |-- server.js
 |       |-- clientFibo.js
 |       `-- clientSum.js
+|
+|-- Exemplo Duas APIs
+|   |-- proto
+|   |   |-- authorApi.proto
+|   |   `-- bookApi.proto
+|   `-- src
+|       |-- client.js
+|       |-- author
+|       |   |-- authorController.js
+|       |   |-- authorDatabase.js
+|       |   |-- authorRepository.js
+|       |   |-- authorService.js
+|       |   `-- server.js
+|       `-- book
+|           |-- authorGateway.js
+|           |-- bookController.js
+|           |-- bookDatabase.js
+|           |-- bookRepository.js
+|           |-- bookService.js
+|           `-- server.js
 |
 `-- Chat Streaming
     |-- proto
@@ -145,6 +203,46 @@ Na prática, o servidor funciona como um pequeno broadcast em memória.
 
 ---
 
+## Exemplo PostgreSQL sem ORM
+
+Apresenta o dominio de **authors** e **books** persistindo dados em um **PostgreSQL real**.
+
+Esse exemplo destaca:
+
+- uso de `pg` com SQL manual
+- tabelas `authors` e `books`
+- `JOIN` para carregar o autor de cada livro
+- Docker Compose para subir o banco
+
+---
+
+## Exemplo PostgreSQL com Prisma
+
+Apresenta o mesmo dominio de **authors** e **books** com **PostgreSQL + Prisma ORM**.
+
+Esse exemplo destaca:
+
+- modelagem do banco em `schema.prisma`
+- relacionamento entre `Author` e `Book`
+- repositories usando Prisma em vez de SQL manual
+- seed inicial com os mesmos dados dos exemplos GraphQL
+
+---
+
+## Exemplo Duas APIs
+
+Apresenta uma comunicação **API para API** usando gRPC.
+
+Nesse cenário:
+
+- a `AuthorApi` cuida dos autores
+- a `BookApi` cuida dos livros
+- a `BookApi` chama a `AuthorApi` por gRPC para validar e enriquecer os dados do autor
+
+É um bom ponto de partida para discutir contratos separados, responsabilidades separadas e integrações entre serviços.
+
+---
+
 # Como executar
 
 Cada exemplo possui seu próprio `package.json`.
@@ -172,6 +270,21 @@ npm run clientFibo
 
 ```bash
 cd "gRPC/Exemplo API em Camadas"
+npm run client
+```
+
+```bash
+cd "gRPC/Exemplo PostgreSQL sem ORM"
+npm run client
+```
+
+```bash
+cd "gRPC/Exemplo PostgreSQL com Prisma"
+npm run client
+```
+
+```bash
+cd "gRPC/Exemplo Duas APIs"
 npm run client
 ```
 

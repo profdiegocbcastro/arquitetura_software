@@ -1,0 +1,26 @@
+services:
+  # =========================================================
+  # Container do Banco de Dados
+  # =========================================================
+  #
+  # O Prisma será executado localmente pela aplicação Node.js.
+  # O Docker sobe somente o PostgreSQL.
+  #
+  db:
+    image: postgres:15
+    container_name: grpc_library_prisma_db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: grpc_library_prisma
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5434:5432"
+
+    volumes:
+      - grpc_library_prisma_pgdata:/var/lib/postgresql/data
+
+volumes:
+  grpc_library_prisma_pgdata:
