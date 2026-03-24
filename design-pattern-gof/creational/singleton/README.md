@@ -23,7 +23,7 @@ Depois disso, os clientes usam o recurso compartilhado obtido por meio do single
 
 ## Diagrama PlantUML
 
-O diagrama deste padrão está em [singleton.puml](/home/gabriel-ramos/IdeaProjects/faculdade/arquitetura_software/design-pattern-gof/creational/singleton/singleton.puml).
+O diagrama deste padrão está em [singleton.puml](./singleton.puml).
 
 ## Ideia arquitetural
 

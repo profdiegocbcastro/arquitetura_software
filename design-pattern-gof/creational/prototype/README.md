@@ -24,7 +24,7 @@ Com isso, a aplicação reaproveita estruturas prontas, reduz repetição de con
 
 ## Diagrama PlantUML
 
-O diagrama deste padrão está em [prototype.puml](/home/gabriel-ramos/IdeaProjects/faculdade/arquitetura_software/design-pattern-gof/creational/prototype/prototype.puml).
+O diagrama deste padrão está em [prototype.puml](./prototype.puml).
 
 ## Ideia arquitetural
 

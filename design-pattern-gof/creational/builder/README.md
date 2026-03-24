@@ -25,7 +25,7 @@ Ao final, o cliente solicita o `Product` já montado, sem precisar conhecer os d
 
 ## Diagrama PlantUML
 
-O diagrama deste padrão está em [builder.puml](/home/gabriel-ramos/IdeaProjects/faculdade/arquitetura_software/design-pattern-gof/creational/builder/builder.puml).
+O diagrama deste padrão está em [builder.puml](./builder.puml).
 
 ## Ideia arquitetural
 

@@ -25,7 +25,7 @@ Com isso, a criação dos objetos fica isolada em um ponto específico da arquit
 
 ## Diagrama PlantUML
 
-O diagrama deste padrão está em [factory-method.puml](/home/gabriel-ramos/IdeaProjects/faculdade/arquitetura_software/design-pattern-gof/creational/factory-method/factory-method.puml).
+O diagrama deste padrão está em [factory-method.puml](./factory-method.puml).
 
 ## Ideia arquitetural
 

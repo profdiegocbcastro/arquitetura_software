@@ -25,7 +25,7 @@ Depois da criação, o cliente interage apenas com os contratos dos produtos abs
 
 ## Diagrama PlantUML
 
-O diagrama deste padrão está em [abstract-factory.puml](/home/gabriel-ramos/IdeaProjects/faculdade/arquitetura_software/design-pattern-gof/creational/abstract-factory/abstract-factory.puml).
+O diagrama deste padrão está em [abstract-factory.puml](./abstract-factory.puml).
 
 ## Ideia arquitetural
 
