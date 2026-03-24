@@ -1,0 +1,60 @@
+@startuml
+title Bridge - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+abstract class Abstraction {
+  - implementor: Implementor
+  + operation(): void
+}
+
+class RefinedAbstractionA {
+  + operation(): void
+}
+
+class RefinedAbstractionB {
+  + operation(): void
+}
+
+interface Implementor {
+  + implementationOperation(): void
+}
+
+class ConcreteImplementorA {
+  + implementationOperation(): void
+}
+
+class ConcreteImplementorB {
+  + implementationOperation(): void
+}
+
+Client --> Abstraction : usa
+Abstraction *-- Implementor : delega
+RefinedAbstractionA --|> Abstraction
+RefinedAbstractionB --|> Abstraction
+ConcreteImplementorA ..|> Implementor
+ConcreteImplementorB ..|> Implementor
+
+note right of Abstraction
+  A abstração e a implementação
+  variam em hierarquias independentes.
+end note
+
+@enduml
+
+@startuml
+title Bridge - Comunicação
+
+actor Client
+participant RefinedAbstraction
+participant ConcreteImplementor
+
+Client -> RefinedAbstraction : operation()
+RefinedAbstraction -> RefinedAbstraction : aplica regra de negócio
+RefinedAbstraction -> ConcreteImplementor : implementationOperation()
+ConcreteImplementor --> RefinedAbstraction : resultado técnico
+RefinedAbstraction --> Client : resultado final
+
+@enduml

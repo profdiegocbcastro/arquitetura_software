@@ -1,0 +1,46 @@
+@startuml
+title Proxy - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Subject {
+  + request(): void
+}
+
+class RealSubject {
+  + request(): void
+}
+
+class Proxy {
+  - realSubject: RealSubject
+  + request(): void
+}
+
+Client --> Subject : usa
+RealSubject ..|> Subject
+Proxy ..|> Subject
+Proxy --> RealSubject : controla acesso
+
+note right of Proxy
+  Pode aplicar lazy loading, cache,
+  segurança ou outro controle de acesso.
+end note
+
+@enduml
+
+@startuml
+title Proxy - Comunicação
+
+actor Client
+participant Proxy
+participant RealSubject
+
+Client -> Proxy : request()
+Proxy -> Proxy : aplica controle de acesso
+Proxy -> RealSubject : request()
+RealSubject --> Proxy : resposta real
+Proxy --> Client : resposta final
+
+@enduml

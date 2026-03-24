@@ -1,0 +1,60 @@
+@startuml
+title Decorator - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Cliente
+
+interface Component {
+  + operation(): void
+}
+
+class ConcreteComponent {
+  + operation(): void
+}
+
+abstract class Decorator {
+  - wrappee: Component
+  + operation(): void
+}
+
+class ConcreteDecoratorA {
+  + operation(): void
+}
+
+class ConcreteDecoratorB {
+  + operation(): void
+}
+
+Cliente --> Component : usa
+ConcreteComponent ..|> Component
+Decorator ..|> Component
+Decorator *-- Component : encapsula
+ConcreteDecoratorA --|> Decorator
+ConcreteDecoratorB --|> Decorator
+
+note right of Decorator
+  Mantém o mesmo contrato do componente
+  e adiciona comportamento por composição.
+end note
+
+@enduml
+
+@startuml
+title Decorator - Comunicação
+
+actor Cliente
+participant ConcreteDecoratorA
+participant ConcreteDecoratorB
+participant ConcreteComponent
+
+Cliente -> ConcreteDecoratorA : operation()
+ConcreteDecoratorA -> ConcreteDecoratorA : adiciona comportamento A
+ConcreteDecoratorA -> ConcreteDecoratorB : operation()
+ConcreteDecoratorB -> ConcreteDecoratorB : adiciona comportamento B
+ConcreteDecoratorB -> ConcreteComponent : operation()
+ConcreteComponent --> ConcreteDecoratorB : operação base
+ConcreteDecoratorB --> ConcreteDecoratorA : resultado decorado
+ConcreteDecoratorA --> Cliente : resultado final
+
+@enduml

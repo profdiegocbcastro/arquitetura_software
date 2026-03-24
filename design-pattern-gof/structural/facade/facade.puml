@@ -1,0 +1,42 @@
+@startuml
+title Facade - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+class Facade
+class SubsystemA
+class SubsystemB
+class SubsystemC
+
+Client --> Facade : usa
+Facade --> SubsystemA : coordena
+Facade --> SubsystemB : coordena
+Facade --> SubsystemC : coordena
+
+note right of Facade
+  Expõe uma interface simples
+  para um fluxo composto por vários subsistemas.
+end note
+
+@enduml
+
+@startuml
+title Facade - Comunicação
+
+actor Client
+participant Facade
+participant SubsystemA
+participant SubsystemB
+participant SubsystemC
+
+Client -> Facade : executarCasoDeUso()
+Facade -> SubsystemA : etapa 1
+SubsystemA --> Facade : resultado parcial
+Facade -> SubsystemB : etapa 2
+SubsystemB --> Facade : resultado parcial
+Facade -> SubsystemC : etapa 3
+SubsystemC --> Facade : resultado final
+Facade --> Client : resposta consolidada
+
+@enduml

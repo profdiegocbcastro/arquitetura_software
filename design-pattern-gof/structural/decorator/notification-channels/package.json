@@ -1,0 +1,12 @@
+{
+  "name": "decorator-notification-channels",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npx ts-node main.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

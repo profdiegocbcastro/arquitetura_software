@@ -1,0 +1,46 @@
+@startuml
+title Adapter - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Target {
+  + request(): void
+}
+
+class Adapter {
+  - adaptee: Adaptee
+  + request(): void
+}
+
+class Adaptee {
+  + specificRequest(): void
+}
+
+Client --> Target : usa
+Adapter ..|> Target
+Adapter --> Adaptee : traduz chamada
+
+note right of Adapter
+  Converte a interface esperada pelo cliente
+  para a interface disponível no adaptee.
+end note
+
+@enduml
+
+@startuml
+title Adapter - Comunicação
+
+actor Client
+participant Adapter
+participant Adaptee
+
+Client -> Adapter : request()
+Adapter -> Adapter : converte parâmetros e estrutura
+Adapter -> Adaptee : specificRequest()
+Adaptee --> Adapter : resposta original
+Adapter -> Adapter : adapta resposta
+Adapter --> Client : resposta no formato esperado
+
+@enduml

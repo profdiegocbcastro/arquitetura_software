@@ -1,0 +1,50 @@
+@startuml
+title Composite - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Component {
+  + operation(): void
+}
+
+class Leaf {
+  + operation(): void
+}
+
+class Composite {
+  - children: List<Component>
+  + add(child: Component): void
+  + remove(child: Component): void
+  + operation(): void
+}
+
+Client --> Component : usa
+Leaf ..|> Component
+Composite ..|> Component
+Composite *-- Component : contém
+
+note right of Composite
+  Executa a operação agregando
+  o comportamento dos componentes filhos.
+end note
+
+@enduml
+
+@startuml
+title Composite - Comunicação
+
+actor Client
+participant Composite
+participant LeafA
+participant LeafB
+
+Client -> Composite : operation()
+Composite -> LeafA : operation()
+LeafA --> Composite : resultado
+Composite -> LeafB : operation()
+LeafB --> Composite : resultado
+Composite --> Client : resultado agregado
+
+@enduml

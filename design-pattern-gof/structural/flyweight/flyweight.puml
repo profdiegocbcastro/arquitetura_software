@@ -1,0 +1,57 @@
+@startuml
+title Flyweight - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Flyweight {
+  + operation(extrinsicState): void
+}
+
+class ConcreteFlyweight {
+  - intrinsicState
+  + operation(extrinsicState): void
+}
+
+class FlyweightFactory {
+  - cache
+  + getFlyweight(key): Flyweight
+}
+
+class Context {
+  - extrinsicState
+}
+
+Client --> FlyweightFactory : solicita
+FlyweightFactory --> Flyweight : reutiliza
+ConcreteFlyweight ..|> Flyweight
+Client --> Context : mantém
+Client --> Flyweight : usa com contexto
+
+note right of ConcreteFlyweight
+  Mantém apenas o estado intrínseco,
+  que pode ser compartilhado.
+end note
+
+@enduml
+
+@startuml
+title Flyweight - Comunicação
+
+actor Client
+participant FlyweightFactory
+participant ConcreteFlyweight
+
+Client -> FlyweightFactory : getFlyweight(chave)
+alt flyweight já existe
+  FlyweightFactory --> Client : instância reutilizada
+else flyweight não existe
+  FlyweightFactory -> ConcreteFlyweight : cria instância
+  ConcreteFlyweight --> FlyweightFactory : flyweight
+  FlyweightFactory --> Client : nova instância
+end
+
+Client -> ConcreteFlyweight : operation(estadoExtrinseco)
+
+@enduml
