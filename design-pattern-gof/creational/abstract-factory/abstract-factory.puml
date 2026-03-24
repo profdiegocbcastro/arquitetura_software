@@ -1,0 +1,76 @@
+@startuml
+title Abstract Factory - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Cliente
+
+interface AbstractFactory {
+  + createProductA(): AbstractProductA
+  + createProductB(): AbstractProductB
+}
+
+interface AbstractProductA {
+  + executarA(): void
+}
+
+interface AbstractProductB {
+  + executarB(): void
+}
+
+class ConcreteFactory1 {
+  + createProductA(): AbstractProductA
+  + createProductB(): AbstractProductB
+}
+
+class ConcreteFactory2 {
+  + createProductA(): AbstractProductA
+  + createProductB(): AbstractProductB
+}
+
+class ConcreteProductA1
+class ConcreteProductB1
+class ConcreteProductA2
+class ConcreteProductB2
+
+Cliente --> AbstractFactory : usa
+ConcreteFactory1 ..|> AbstractFactory
+ConcreteFactory2 ..|> AbstractFactory
+ConcreteFactory1 --> ConcreteProductA1 : cria
+ConcreteFactory1 --> ConcreteProductB1 : cria
+ConcreteFactory2 --> ConcreteProductA2 : cria
+ConcreteFactory2 --> ConcreteProductB2 : cria
+ConcreteProductA1 ..|> AbstractProductA
+ConcreteProductB1 ..|> AbstractProductB
+ConcreteProductA2 ..|> AbstractProductA
+ConcreteProductB2 ..|> AbstractProductB
+
+note right of AbstractFactory
+  Cria famílias de produtos
+  que devem funcionar juntas.
+end note
+
+@enduml
+
+@startuml
+title Abstract Factory - Comunicação
+
+actor Cliente
+participant ConcreteFactory
+participant ProductA
+participant ProductB
+
+Cliente -> ConcreteFactory : createProductA()
+ConcreteFactory -> ProductA : instancia produto da família
+ProductA --> ConcreteFactory : produto criado
+ConcreteFactory --> Cliente : retorna ProductA
+
+Cliente -> ConcreteFactory : createProductB()
+ConcreteFactory -> ProductB : instancia produto compatível
+ProductB --> ConcreteFactory : produto criado
+ConcreteFactory --> Cliente : retorna ProductB
+
+Cliente -> ProductA : executarA()
+Cliente -> ProductB : executarB()
+
+@enduml

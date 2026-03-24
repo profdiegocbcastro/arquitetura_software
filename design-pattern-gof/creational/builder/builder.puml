@@ -1,0 +1,55 @@
+@startuml
+title Builder - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Cliente
+
+interface Builder {
+  + buildParteA(): Builder
+  + buildParteB(): Builder
+  + getResult(): Product
+}
+
+class ConcreteBuilder {
+  - product: Product
+  + buildParteA(): Builder
+  + buildParteB(): Builder
+  + getResult(): Product
+}
+
+class Product
+
+class Director {
+  + construct(builder: Builder): void
+}
+
+Cliente --> Director : usa
+Cliente --> Builder : configura
+Director --> Builder : orquestra etapas
+ConcreteBuilder ..|> Builder
+ConcreteBuilder --> Product : monta
+
+note right of Director
+  Encapsula uma sequência padrão
+  de construção quando necessário.
+end note
+
+@enduml
+
+@startuml
+title Builder - Comunicação
+
+actor Cliente
+participant Director
+participant ConcreteBuilder
+participant Product
+
+Cliente -> Director : construct(builder)
+Director -> ConcreteBuilder : buildParteA()
+Director -> ConcreteBuilder : buildParteB()
+Cliente -> ConcreteBuilder : getResult()
+ConcreteBuilder --> Cliente : Product
+Cliente -> Product : usa objeto construído
+
+@enduml

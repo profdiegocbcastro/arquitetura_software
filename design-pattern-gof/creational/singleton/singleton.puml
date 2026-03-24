@@ -1,0 +1,54 @@
+@startuml
+title Singleton - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class ClienteA
+class ClienteB
+
+class Singleton {
+  - instance: Singleton
+  - recursoCompartilhado: RecursoCompartilhado
+  - Singleton()
+  + getInstance(): Singleton
+  + getRecursoCompartilhado(): RecursoCompartilhado
+}
+
+class RecursoCompartilhado {
+  + executarOperacao(): void
+}
+
+ClienteA --> Singleton : solicita getInstance()
+ClienteB --> Singleton : solicita getInstance()
+Singleton *-- RecursoCompartilhado : encapsula
+ClienteA --> RecursoCompartilhado : usa via Singleton
+ClienteB --> RecursoCompartilhado : usa via Singleton
+
+note right of Singleton
+  Controla a criação de uma única instância
+  e centraliza o acesso ao recurso compartilhado.
+end note
+
+@enduml
+
+@startuml
+title Singleton - Comunicação
+
+actor Cliente
+participant Singleton
+participant RecursoCompartilhado
+
+Cliente -> Singleton : getInstance()
+alt instância ainda não existe
+  Singleton -> Singleton : cria instância única
+  Singleton -> RecursoCompartilhado : inicializa recurso
+else instância já existe
+  Singleton -> Singleton : reutiliza instância existente
+end
+
+Singleton --> Cliente : retorna instância
+Cliente -> Singleton : getRecursoCompartilhado()
+Singleton --> Cliente : retorna recurso
+Cliente -> RecursoCompartilhado : executarOperacao()
+
+@enduml

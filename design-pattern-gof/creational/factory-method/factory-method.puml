@@ -1,0 +1,64 @@
+@startuml
+title Factory Method - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Cliente
+
+abstract class Creator {
+  + executarFluxo(): void
+  + criarProduto(): Product
+}
+
+interface Product {
+  + executar(): void
+}
+
+class ConcreteCreatorA {
+  + criarProduto(): Product
+}
+
+class ConcreteCreatorB {
+  + criarProduto(): Product
+}
+
+class ConcreteProductA {
+  + executar(): void
+}
+
+class ConcreteProductB {
+  + executar(): void
+}
+
+Cliente --> Creator : usa
+Creator --> Product : depende do contrato
+ConcreteCreatorA --|> Creator
+ConcreteCreatorB --|> Creator
+ConcreteCreatorA --> ConcreteProductA : cria
+ConcreteCreatorB --> ConcreteProductB : cria
+ConcreteProductA ..|> Product
+ConcreteProductB ..|> Product
+
+note right of Creator
+  Define o fluxo principal
+  e delega a criação ao método fábrica.
+end note
+
+@enduml
+
+@startuml
+title Factory Method - Comunicação
+
+actor Cliente
+participant ConcreteCreator
+participant ConcreteProduct
+
+Cliente -> ConcreteCreator : executarFluxo()
+ConcreteCreator -> ConcreteCreator : criarProduto()
+ConcreteCreator -> ConcreteProduct : instancia produto concreto
+ConcreteProduct --> ConcreteCreator : produto criado
+ConcreteCreator -> ConcreteProduct : executar()
+ConcreteProduct --> ConcreteCreator : resultado da operação
+ConcreteCreator --> Cliente : fluxo concluído
+
+@enduml

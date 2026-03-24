@@ -1,0 +1,43 @@
+@startuml
+title Prototype - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Cliente
+
+interface Prototype {
+  + clone(): Prototype
+}
+
+class ConcretePrototype {
+  - estado: Dados
+  + clone(): Prototype
+}
+
+class Dados
+
+Cliente --> Prototype : solicita clone()
+ConcretePrototype ..|> Prototype
+ConcretePrototype *-- Dados : contém
+
+note right of ConcretePrototype
+  Clona seu próprio estado
+  e devolve uma nova instância.
+end note
+
+@enduml
+
+@startuml
+title Prototype - Comunicação
+
+actor Cliente
+participant ConcretePrototype as ProtótipoBase
+participant ConcretePrototype as Clone
+
+Cliente -> ProtótipoBase : clone()
+ProtótipoBase -> Clone : copia estado interno
+Clone --> Cliente : nova instância
+Cliente -> Clone : personaliza campos específicos
+Cliente -> Clone : usa objeto clonado
+
+@enduml
