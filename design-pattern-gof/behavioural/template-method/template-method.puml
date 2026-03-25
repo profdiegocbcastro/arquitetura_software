@@ -1,0 +1,40 @@
+@startuml
+title Template Method - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+abstract class AbstractClass {
+  + templateMethod(): void
+  # stepOne(): void
+  # stepTwo(): void
+}
+
+class ConcreteClassA
+class ConcreteClassB
+
+Client --> AbstractClass : usa
+ConcreteClassA --|> AbstractClass
+ConcreteClassB --|> AbstractClass
+
+note right of AbstractClass
+  O metodo template define
+  a ordem fixa do processo
+  e delega as etapas variaveis.
+end note
+
+@enduml
+
+@startuml
+title Template Method - Comunicação
+
+actor Client
+participant ConcreteClass
+
+Client -> ConcreteClass : templateMethod()
+ConcreteClass -> ConcreteClass : stepOne()
+ConcreteClass -> ConcreteClass : stepTwo()
+ConcreteClass --> Client : processo concluido
+
+@enduml

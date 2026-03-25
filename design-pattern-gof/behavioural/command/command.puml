@@ -1,0 +1,51 @@
+@startuml
+title Command - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+class Invoker
+
+interface Command {
+  + execute(): void
+}
+
+class ConcreteCommand {
+  - receiver: Receiver
+  + execute(): void
+}
+
+class Receiver {
+  + action(): void
+}
+
+Client --> Invoker : configura
+Client --> ConcreteCommand : instancia
+Invoker --> Command : dispara
+ConcreteCommand ..|> Command
+ConcreteCommand --> Receiver : delega
+
+note right of ConcreteCommand
+  Encapsula a operacao
+  e conhece o receiver
+  que executa o trabalho real.
+end note
+
+@enduml
+
+@startuml
+title Command - Comunicação
+
+actor Client
+participant Invoker
+participant ConcreteCommand
+participant Receiver
+
+Client -> Invoker : envia comando
+Invoker -> ConcreteCommand : execute()
+ConcreteCommand -> Receiver : action()
+Receiver --> ConcreteCommand : concluido
+ConcreteCommand --> Invoker : retorno
+Invoker --> Client : resultado final
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title Strategy - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Strategy {
+  + execute()
+}
+
+class Context {
+  - strategy: Strategy
+  + setStrategy(strategy: Strategy): void
+  + perform(): void
+}
+
+class ConcreteStrategyA
+class ConcreteStrategyB
+
+Client --> Context : configura
+Context --> Strategy : delega
+ConcreteStrategyA ..|> Strategy
+ConcreteStrategyB ..|> Strategy
+
+note right of Context
+  O algoritmo variavel
+  fica encapsulado em
+  uma strategy trocavel.
+end note
+
+@enduml
+
+@startuml
+title Strategy - Comunicação
+
+actor Client
+participant Context
+participant Strategy
+
+Client -> Context : setStrategy()
+Client -> Context : perform()
+Context -> Strategy : execute()
+Strategy --> Context : resultado
+Context --> Client : resposta final
+
+@enduml

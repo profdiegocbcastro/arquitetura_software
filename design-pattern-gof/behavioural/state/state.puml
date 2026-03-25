@@ -1,0 +1,50 @@
+@startuml
+title State - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface State {
+  + handle(context: Context): void
+}
+
+class Context {
+  - state: State
+  + setState(state: State): void
+  + request(): void
+}
+
+class ConcreteStateA
+class ConcreteStateB
+
+Client --> Context : usa
+Context --> State : delega
+ConcreteStateA ..|> State
+ConcreteStateB ..|> State
+ConcreteStateA --> Context : pode trocar estado
+ConcreteStateB --> Context : pode trocar estado
+
+note right of Context
+  O comportamento depende
+  do estado atual e as
+  transicoes sao explicitas.
+end note
+
+@enduml
+
+@startuml
+title State - Comunicação
+
+actor Client
+participant Context
+participant StateA
+participant StateB
+
+Client -> Context : request()
+Context -> StateA : handle(context)
+StateA -> Context : setState(StateB)
+StateA --> Context : resposta
+Context --> Client : comportamento final
+
+@enduml

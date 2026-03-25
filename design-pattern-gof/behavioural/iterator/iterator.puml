@@ -1,0 +1,50 @@
+@startuml
+title Iterator - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Iterator {
+  + hasNext(): boolean
+  + next()
+}
+
+interface Aggregate {
+  + createIterator(): Iterator
+}
+
+class ConcreteAggregate
+class ConcreteIterator
+
+Client --> Aggregate : solicita iterador
+ConcreteAggregate ..|> Aggregate
+ConcreteIterator ..|> Iterator
+ConcreteAggregate --> ConcreteIterator : cria
+Client --> Iterator : percorre
+
+note right of ConcreteIterator
+  Mantem o estado do percurso
+  sem expor a estrutura interna
+  da colecao ao cliente.
+end note
+
+@enduml
+
+@startuml
+title Iterator - Comunicação
+
+actor Client
+participant Aggregate
+participant Iterator
+
+Client -> Aggregate : createIterator()
+Aggregate --> Client : iterator
+loop enquanto houver elementos
+  Client -> Iterator : hasNext()
+  Iterator --> Client : true
+  Client -> Iterator : next()
+  Iterator --> Client : elemento atual
+end
+
+@enduml

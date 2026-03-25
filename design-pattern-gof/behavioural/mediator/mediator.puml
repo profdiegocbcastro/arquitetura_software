@@ -1,0 +1,47 @@
+@startuml
+title Mediator - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Mediator {
+  + notify(sender, event): void
+}
+
+class ConcreteMediator
+abstract class Colleague
+class ColleagueA
+class ColleagueB
+
+Client --> ConcreteMediator : configura
+ConcreteMediator ..|> Mediator
+Colleague --> Mediator : referencia
+ColleagueA --|> Colleague
+ColleagueB --|> Colleague
+ConcreteMediator --> ColleagueA : coordena
+ConcreteMediator --> ColleagueB : coordena
+
+note right of ConcreteMediator
+  Centraliza a orquestracao
+  e evita dependencias diretas
+  entre os colegas.
+end note
+
+@enduml
+
+@startuml
+title Mediator - Comunicação
+
+actor Client
+participant ColleagueA
+participant Mediator
+participant ColleagueB
+
+Client -> ColleagueA : acao local
+ColleagueA -> Mediator : notify(event)
+Mediator -> ColleagueB : ajustar comportamento
+ColleagueB --> Mediator : concluido
+Mediator --> ColleagueA : retorno indireto
+
+@enduml

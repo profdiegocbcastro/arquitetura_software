@@ -1,0 +1,42 @@
+@startuml
+title Memento - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+class Caretaker
+class Originator {
+  + createMemento(): Memento
+  + restore(m: Memento): void
+}
+class Memento
+
+Client --> Caretaker : armazena snapshot
+Client --> Originator : solicita salvar/restaurar
+Originator --> Memento : cria
+Caretaker --> Memento : guarda
+Originator --> Memento : restaura
+
+note right of Memento
+  Representa um snapshot
+  encapsulado do estado do
+  originator.
+end note
+
+@enduml
+
+@startuml
+title Memento - Comunicação
+
+actor Client
+participant Originator
+participant Caretaker
+
+Client -> Originator : createMemento()
+Originator --> Client : memento
+Client -> Caretaker : save(memento)
+Client -> Caretaker : getLast()
+Caretaker --> Client : memento
+Client -> Originator : restore(memento)
+
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+title Chain of Responsibility - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Handler {
+  + setNext(handler: Handler): Handler
+  + handle(request): Response
+}
+
+abstract class BaseHandler {
+  - nextHandler: Handler
+  + setNext(handler: Handler): Handler
+  + handle(request): Response
+}
+
+class ConcreteHandlerA {
+  + handle(request): Response
+}
+
+class ConcreteHandlerB {
+  + handle(request): Response
+}
+
+class ConcreteHandlerC {
+  + handle(request): Response
+}
+
+Client --> Handler : inicia fluxo
+BaseHandler ..|> Handler
+ConcreteHandlerA --|> BaseHandler
+ConcreteHandlerB --|> BaseHandler
+ConcreteHandlerC --|> BaseHandler
+BaseHandler --> Handler : próximo
+
+note right of BaseHandler
+  Encaminha a solicitação
+  apenas quando a etapa atual
+  não bloqueia o fluxo.
+end note
+
+@enduml
+
+@startuml
+title Chain of Responsibility - Comunicação
+
+actor Client
+participant HandlerA
+participant HandlerB
+participant HandlerC
+
+Client -> HandlerA : handle(request)
+HandlerA -> HandlerA : valida etapa A
+HandlerA -> HandlerB : handle(request)
+HandlerB -> HandlerB : valida etapa B
+HandlerB -> HandlerC : handle(request)
+HandlerC -> HandlerC : conclui ou bloqueia
+HandlerC --> HandlerB : response
+HandlerB --> HandlerA : response
+HandlerA --> Client : response final
+
+@enduml

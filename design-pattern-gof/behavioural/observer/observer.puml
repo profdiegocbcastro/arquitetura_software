@@ -1,0 +1,50 @@
+@startuml
+title Observer - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Subject {
+  + subscribe(o: Observer): void
+  + unsubscribe(o: Observer): void
+  + notify(): void
+}
+
+interface Observer {
+  + update(): void
+}
+
+class ConcreteSubject
+class ConcreteObserverA
+class ConcreteObserverB
+
+ConcreteSubject ..|> Subject
+ConcreteObserverA ..|> Observer
+ConcreteObserverB ..|> Observer
+Client --> Subject : registra observers
+Subject --> Observer : notifica
+
+note right of Subject
+  Mantem a lista de inscritos
+  e propaga mudancas para
+  todos os observers.
+end note
+
+@enduml
+
+@startuml
+title Observer - Comunicação
+
+actor Client
+participant Subject
+participant ObserverA
+participant ObserverB
+
+Client -> Subject : subscribe()
+Client -> Subject : subscribe()
+Subject -> Subject : estado muda
+Subject -> ObserverA : update()
+Subject -> ObserverB : update()
+
+@enduml

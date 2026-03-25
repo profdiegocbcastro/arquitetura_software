@@ -1,0 +1,49 @@
+@startuml
+title Visitor - Estrutura
+
+skinparam classAttributeIconSize 0
+
+class Client
+
+interface Visitor {
+  + visitElementA(a: ElementA): void
+  + visitElementB(b: ElementB): void
+}
+
+interface Element {
+  + accept(v: Visitor): void
+}
+
+class ConcreteVisitor
+class ElementA
+class ElementB
+
+Client --> Element : percorre
+Client --> Visitor : aplica
+ConcreteVisitor ..|> Visitor
+ElementA ..|> Element
+ElementB ..|> Element
+ElementA --> Visitor : accept()
+ElementB --> Visitor : accept()
+
+note right of Visitor
+  Cada operacao nova vira
+  um visitor sem alterar os
+  elementos existentes.
+end note
+
+@enduml
+
+@startuml
+title Visitor - Comunicação
+
+actor Client
+participant ElementA
+participant Visitor
+
+Client -> ElementA : accept(visitor)
+ElementA -> Visitor : visitElementA(this)
+Visitor --> ElementA : resultado
+ElementA --> Client : concluido
+
+@enduml
