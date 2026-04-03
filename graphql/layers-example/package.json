@@ -1,5 +1,5 @@
 {
-  "name": "exemplo-com-orm",
+  "name": "layers-example",
   "version": "1.0.0",
   "type": "module",
   "main": "src/index.js",

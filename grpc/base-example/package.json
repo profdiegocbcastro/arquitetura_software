@@ -1,15 +1,18 @@
 {
-  "name": "exemplo-api-sem-orm",
+  "name": "base-example",
   "version": "1.0.0",
+  "main": "index.js",
   "type": "module",
-  "main": "src/server.js",
   "scripts": {
     "server": "node src/server.js",
     "client": "node src/client.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
-    "@grpc/proto-loader": "^0.8.0",
-    "pg": "^8.13.1"
+    "@grpc/proto-loader": "^0.8.0"
   }
 }

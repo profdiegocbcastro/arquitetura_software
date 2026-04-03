@@ -1,5 +1,5 @@
 {
-  "name": "exemplo-api-com-orm",
+  "name": "orm-api",
   "version": "1.0.0",
   "type": "module",
   "main": "src/server.js",
