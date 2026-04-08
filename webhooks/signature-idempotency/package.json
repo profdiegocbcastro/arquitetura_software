@@ -1,0 +1,14 @@
+{
+  "name": "webhooks-signature-idempotency",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/billing-provider.js",
+  "scripts": {
+    "provider": "node src/billing-provider.js",
+    "receiver": "node src/accounting-service.js",
+    "client": "node src/client.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

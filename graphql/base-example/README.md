@@ -1,4 +1,4 @@
-# Exemplo 1 — API GraphQL simples com PostgreSQL
+# `base-example` — API GraphQL simples com PostgreSQL
 
 Este projeto demonstra a construção de uma **API GraphQL simples** conectada a um **banco de dados PostgreSQL**, utilizando **Node.js, Express e Apollo Server**.
 
@@ -19,7 +19,7 @@ PostgreSQL
 # Estrutura do projeto
 
 ```
-Exemplo Base
+base-example
 │
 ├─ docker-compose.yml
 ├─ Dockerfile
@@ -31,9 +31,7 @@ Exemplo Base
 └─ src
    ├─ index.js
    ├─ db.js
-   │
-   └─ graphql
-      └─ book.graphql
+   └─ book.graphql
 ```
 
 ---
@@ -91,7 +89,7 @@ As configurações são obtidas através de variáveis de ambiente.
 
 ---
 
-### src/graphql/book.graphql
+### src/book.graphql
 
 Define o **schema GraphQL da aplicação**.
 
@@ -116,6 +114,8 @@ Responsável por:
 * carregar o schema GraphQL
 * definir os resolvers
 * executar consultas SQL no banco
+
+Neste exemplo, os resolvers ficam no próprio `src/index.js`, sem uma pasta separada de `resolvers`.
 
 ---
 

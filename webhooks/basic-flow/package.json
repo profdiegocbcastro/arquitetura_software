@@ -1,0 +1,14 @@
+{
+  "name": "webhooks-basic-flow",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/checkout-service.js",
+  "scripts": {
+    "provider": "node src/checkout-service.js",
+    "receiver": "node src/fulfillment-service.js",
+    "client": "node src/client.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

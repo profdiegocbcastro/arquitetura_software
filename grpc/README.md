@@ -28,7 +28,7 @@ Servidor gRPC
 ```text
 grpc
 |
-|-- Exemplo Base
+|-- base-example
 |   |-- proto
 |   |   `-- bookStore.proto
 |   `-- src
@@ -39,26 +39,22 @@ grpc
 |           |-- Service.js
 |           `-- Implementation.js
 |
-|-- Exemplo API em Camadas
+|-- simple-streaming
 |   |-- proto
-|   |   `-- orderApi.proto
+|   |   `-- calculadora.proto
 |   `-- src
-|       |-- client.js
 |       |-- server.js
-|       |-- database
-|       |   |-- catalogDatabase.js
-|       |   `-- orderDatabase.js
-|       |-- product
-|       |   `-- productRepository.js
-|       |-- shared
-|       |   |-- applicationError.js
-|       |   `-- toGrpcError.js
-|       `-- order
-|           |-- orderController.js
-|           |-- orderRepository.js
-|           `-- orderService.js
+|       |-- clientFibo.js
+|       `-- clientSum.js
 |
-|-- Exemplo PostgreSQL sem ORM
+|-- chat-streaming
+|   |-- proto
+|   |   `-- chat.proto
+|   `-- src
+|       |-- server.js
+|       `-- client.js
+|
+|-- no-orm-api
 |   |-- db
 |   |   `-- init.sql
 |   |-- proto
@@ -68,6 +64,9 @@ grpc
 |       |-- server.js
 |       |-- database
 |       |   `-- postgres.js
+|       |-- shared
+|       |   |-- applicationError.js
+|       |   `-- toGrpcError.js
 |       |-- author
 |       |   |-- authorRepository.js
 |       |   `-- authorService.js
@@ -77,66 +76,34 @@ grpc
 |       `-- library
 |           `-- libraryController.js
 |
-|-- Exemplo PostgreSQL com Prisma
-|   |-- prisma
-|   |   |-- schema.prisma
-|   |   `-- seed.js
-|   |-- proto
-|   |   `-- libraryApi.proto
-|   `-- src
-|       |-- client.js
-|       |-- server.js
-|       |-- prisma.js
-|       |-- author
-|       |   |-- authorRepository.js
-|       |   `-- authorService.js
-|       |-- book
-|       |   |-- bookRepository.js
-|       |   `-- bookService.js
-|       `-- library
-|           `-- libraryController.js
-|
-|-- Streaming Simples
-|   |-- proto
-|   |   `-- calculadora.proto
-|   `-- src
-|       |-- server.js
-|       |-- clientFibo.js
-|       `-- clientSum.js
-|
-|-- Exemplo Duas APIs
-|   |-- proto
-|   |   |-- authorApi.proto
-|   |   `-- bookApi.proto
-|   `-- src
-|       |-- client.js
-|       |-- author
-|       |   |-- authorController.js
-|       |   |-- authorDatabase.js
-|       |   |-- authorRepository.js
-|       |   |-- authorService.js
-|       |   `-- server.js
-|       `-- book
-|           |-- authorGateway.js
-|           |-- bookController.js
-|           |-- bookDatabase.js
-|           |-- bookRepository.js
-|           |-- bookService.js
-|           `-- server.js
-|
-`-- Chat Streaming
+`-- orm-api
+    |-- prisma
+    |   |-- schema.prisma
+    |   `-- seed.js
     |-- proto
-    |   `-- chat.proto
+    |   `-- libraryApi.proto
     `-- src
+        |-- client.js
         |-- server.js
-        `-- client.js
+        |-- prisma.js
+        |-- shared
+        |   |-- applicationError.js
+        |   `-- toGrpcError.js
+        |-- author
+        |   |-- authorRepository.js
+        |   `-- authorService.js
+        |-- book
+        |   |-- bookRepository.js
+        |   `-- bookService.js
+        `-- library
+            `-- libraryController.js
 ```
 
 ---
 
 # Descrição dos exemplos
 
-## Exemplo Base
+## `base-example`
 
 Apresenta um serviço gRPC tradicional, no estilo **request/response**.
 
@@ -154,7 +121,7 @@ Também mostra uma pequena separação em camadas:
 
 ---
 
-## Streaming Simples
+## `simple-streaming`
 
 Apresenta dois tipos de streaming:
 
@@ -168,29 +135,7 @@ Esse exemplo é útil para enxergar a diferença entre:
 
 ---
 
-## Exemplo API em Camadas
-
-Apresenta um caso unary mais próximo de uma API de negócio.
-
-O serviço modela um fluxo de pedidos com:
-
-- criação de pedido
-- consulta por ID
-- listagem por cliente
-- atualização de status
-- validação de entrada
-- mapeamento de erros para códigos gRPC
-
-Também amplia a separação em camadas:
-
-- **Controller**: adaptação entre gRPC e a aplicação
-- **OrderService**: regras de negócio e transições de status
-- **OrderRepository**: acesso ao `orderDatabase`
-- **ProductRepository**: acesso ao `catalogDatabase`
-
----
-
-## Chat Streaming
+## `chat-streaming`
 
 Apresenta **streaming bidirecional**.
 
@@ -203,9 +148,9 @@ Na prática, o servidor funciona como um pequeno broadcast em memória.
 
 ---
 
-## Exemplo PostgreSQL sem ORM
+## `no-orm-api`
 
-Apresenta o dominio de **authors** e **books** persistindo dados em um **PostgreSQL real**.
+Apresenta o domínio de **authors** e **books** persistindo dados em um **PostgreSQL real**.
 
 Esse exemplo destaca:
 
@@ -213,33 +158,21 @@ Esse exemplo destaca:
 - tabelas `authors` e `books`
 - `JOIN` para carregar o autor de cada livro
 - Docker Compose para subir o banco
+- separação em `libraryController`, `services`, `repositories` e camada `shared`
 
 ---
 
-## Exemplo PostgreSQL com Prisma
+## `orm-api`
 
-Apresenta o mesmo dominio de **authors** e **books** com **PostgreSQL + Prisma ORM**.
+Apresenta o mesmo domínio de **authors** e **books** com **PostgreSQL + Prisma ORM**.
 
 Esse exemplo destaca:
 
-- modelagem do banco em `schema.prisma`
+- modelagem do banco em `prisma/schema.prisma`
 - relacionamento entre `Author` e `Book`
 - repositories usando Prisma em vez de SQL manual
 - seed inicial com os mesmos dados dos exemplos GraphQL
-
----
-
-## Exemplo Duas APIs
-
-Apresenta uma comunicação **API para API** usando gRPC.
-
-Nesse cenário:
-
-- a `AuthorApi` cuida dos autores
-- a `BookApi` cuida dos livros
-- a `BookApi` chama a `AuthorApi` por gRPC para validar e enriquecer os dados do autor
-
-É um bom ponto de partida para discutir contratos separados, responsabilidades separadas e integrações entre serviços.
+- separação em `libraryController`, `services`, `repositories` e camada `shared`
 
 ---
 
@@ -259,39 +192,36 @@ Em outro terminal, execute o cliente correspondente.
 Exemplos:
 
 ```bash
-cd "gRPC/Exemplo Base"
+cd grpc/base-example
 npm run client
 ```
 
 ```bash
-cd "gRPC/Streaming Simples"
+cd grpc/simple-streaming
 npm run clientFibo
 ```
 
 ```bash
-cd "gRPC/Exemplo API em Camadas"
+cd grpc/simple-streaming
+npm run clientSum
+```
+
+```bash
+cd grpc/no-orm-api
 npm run client
 ```
 
 ```bash
-cd "gRPC/Exemplo PostgreSQL sem ORM"
+cd grpc/orm-api
 npm run client
 ```
 
 ```bash
-cd "gRPC/Exemplo PostgreSQL com Prisma"
-npm run client
-```
-
-```bash
-cd "gRPC/Exemplo Duas APIs"
-npm run client
-```
-
-```bash
-cd "gRPC/Chat Streaming"
+cd grpc/chat-streaming
 node src/client.js Gabriel
 ```
+
+Os exemplos `no-orm-api` e `orm-api` também possuem `docker-compose.yml` para subir o PostgreSQL localmente.
 
 ---
 

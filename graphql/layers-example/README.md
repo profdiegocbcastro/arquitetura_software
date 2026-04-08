@@ -1,4 +1,4 @@
-# Exemplo 2 — API GraphQL com camadas e Prisma
+# `layers-example` — API GraphQL com camadas e Prisma
 
 Este projeto demonstra a construção de uma **API GraphQL conectada a um banco PostgreSQL** utilizando **Node.js, Apollo Server e Prisma ORM**, aplicando uma **arquitetura em camadas**.
 
@@ -7,6 +7,7 @@ O acesso aos dados é realizado através de **Services e Repositories**, promove
 
 Arquitetura utilizada:
 
+```text
 Cliente
 ↓
 API GraphQL (Apollo Server)
@@ -18,7 +19,40 @@ Services
 Repositories (Prisma ORM)
 ↓
 PostgreSQL
+```
 
+
+---
+
+# Estrutura do projeto
+
+```text
+layers-example
+|
+|-- docker-compose.yml
+|-- Dockerfile
+|-- package.json
+|-- prisma
+|   |-- schema.prisma
+|   `-- seed.js
+`-- src
+    |-- index.js
+    |-- prisma.js
+    |-- graphql
+    |   |-- schema.graphql
+    |   |-- book.graphql
+    |   `-- author.graphql
+    |-- repositories
+    |   |-- authorRepository.js
+    |   `-- bookRepository.js
+    |-- services
+    |   |-- authorService.js
+    |   `-- bookService.js
+    `-- resolvers
+        |-- index.js
+        |-- authorResolver.js
+        `-- bookResolver.js
+```
 
 ---
 
@@ -52,7 +86,7 @@ Quando o container inicia:
 
 - sincroniza o banco com o schema (`prisma db push`)
 - executa o seed inicial
-- inicia o servidor Node.js
+- inicia a aplicação com `npm start`
 
 ---
 
@@ -130,7 +164,7 @@ Resolvers chamam os services em vez de acessar diretamente o banco.
 
 # Camada de GraphQL
 
-## graphql/*.graphql
+## src/graphql/*.graphql
 
 Define o **schema GraphQL da aplicação**.
 
@@ -159,7 +193,13 @@ Também podem resolver **relacionamentos entre entidades**, como o autor de um l
 
 ---
 
-# index.js
+## src/resolvers/index.js
+
+Combina os resolvers de `Book` e `Author` em um único objeto final, usado pelo Apollo Server.
+
+---
+
+## src/index.js
 
 Arquivo principal da aplicação.
 
@@ -167,5 +207,6 @@ Responsável por:
 
 - iniciar o servidor Apollo
 - carregar os schemas GraphQL
+- instanciar `repositories`, `services` e `resolvers`
 - registrar os resolvers
 - iniciar o servidor HTTP
