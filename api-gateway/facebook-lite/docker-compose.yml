@@ -1,0 +1,70 @@
+version: "3.9"
+
+services:
+  chat-service:
+    build:
+      context: .
+      dockerfile: services/chat-service/Dockerfile
+    container_name: chat_service
+    environment:
+      API_1_INSTANCE_NAME: api-1-grpc-chat
+      NOTIFICATION_GRPC_TARGET: notification-service:50052
+    expose:
+      - "50051"
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
+    container_name: notification_service
+    expose:
+      - "50052"
+
+  graphql-bff-1:
+    build:
+      context: .
+      dockerfile: graphql-bff/Dockerfile
+    container_name: graphql_bff_1
+    environment:
+      INSTANCE_NAME: graphql-bff-1
+      PORT: 4000
+      CHAT_GRPC_TARGET: chat-service:50051
+    depends_on:
+      - chat-service
+      - notification-service
+    expose:
+      - "4000"
+
+  graphql-bff-2:
+    build:
+      context: .
+      dockerfile: graphql-bff/Dockerfile
+    container_name: graphql_bff_2
+    environment:
+      INSTANCE_NAME: graphql-bff-2
+      PORT: 4000
+      CHAT_GRPC_TARGET: chat-service:50051
+    depends_on:
+      - chat-service
+      - notification-service
+    expose:
+      - "4000"
+
+  load-balancer:
+    image: kong:3.7
+    container_name: graphql_lb
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: "off"
+    depends_on:
+      - graphql-bff-1
+      - graphql-bff-2
+    ports:
+      - "4000:8000"
+    volumes:
+      - ./load-balancer/kong.yml:/kong/declarative/kong.yml:ro

@@ -1,0 +1,50 @@
+_format_version: "3.0"
+_transform: true
+
+upstreams:
+  - name: graphql-bff-upstream
+    algorithm: round-robin
+    targets:
+      - target: graphql-bff-1:4000
+        weight: 100
+      - target: graphql-bff-2:4000
+        weight: 100
+
+services:
+  - name: graphql-bff-service
+    host: graphql-bff-upstream
+    port: 4000
+    protocol: http
+    connect_timeout: 3000
+    read_timeout: 3000
+    write_timeout: 3000
+    routes:
+      - name: graphql-route
+        paths:
+          - /graphql
+        strip_path: false
+        methods:
+          - GET
+          - POST
+          - OPTIONS
+
+plugins:
+  - name: key-auth
+    service: graphql-bff-service
+    config:
+      key_names:
+        - apikey
+      key_in_header: true
+      key_in_query: false
+      hide_credentials: true
+
+  - name: rate-limiting
+    service: graphql-bff-service
+    config:
+      policy: local
+      minute: 60
+
+consumers:
+  - username: aluno
+    keyauth_credentials:
+      - key: aula-arq-123

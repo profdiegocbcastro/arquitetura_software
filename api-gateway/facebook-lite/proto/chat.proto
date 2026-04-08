@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package chat;
+
+service ChatService {
+  rpc SendMessageAndNotify(SendMessageRequest) returns (DeliveryResult);
+  rpc ListMessagesByUser(ListMessagesByUserRequest) returns (ListMessagesByUserResponse);
+  rpc ListNotificationsByUser(ListNotificationsByUserRequest) returns (ListNotificationsByUserResponse);
+}
+
+message SendMessageRequest {
+  string from_user_id = 1;
+  string to_user_id = 2;
+  string content = 3;
+}
+
+message ListMessagesByUserRequest {
+  string user_id = 1;
+}
+
+message ListNotificationsByUserRequest {
+  string user_id = 1;
+}
+
+message ChatMessage {
+  string id = 1;
+  string from_user_id = 2;
+  string to_user_id = 3;
+  string content = 4;
+  string sent_at = 5;
+}
+
+message Notification {
+  string id = 1;
+  string user_id = 2;
+  string title = 3;
+  string content = 4;
+  string created_at = 5;
+}
+
+message DeliveryResult {
+  ChatMessage message = 1;
+  Notification notification = 2;
+  string api_1_instance = 3;
+}
+
+message ListMessagesByUserResponse {
+  repeated ChatMessage messages = 1;
+}
+
+message ListNotificationsByUserResponse {
+  repeated Notification notifications = 1;
+}

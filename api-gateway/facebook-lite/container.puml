@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+
+title Facebook Lite - Container Diagram (Gateway + GraphQL + gRPC interno)
+
+' Sistema principal do exemplo
+System_Boundary(facebookLite, "Facebook Lite (Exemplo de Aula)") {
+  Container(kongGateway, "Kong Gateway", "Kong", "Entrada unica publica. Aplica auth, rate limit, timeout e roteamento para /graphql")
+  Container(graphqlBff, "GraphQL BFF", "Node.js + Apollo Server", "API publica GraphQL. Orquestra chamadas internas")
+  Container(api1Chat, "API 1 gRPC (Chat Service)", "Node.js + gRPC", "Recebe chamadas do BFF, gerencia mensagens e aciona API 2")
+  Container(api2Notification, "API 2 gRPC (Notification Service)", "Node.js + gRPC", "Cria e lista notificacoes")
+}
+
+' Ator externo
+Person(client, "Cliente", "Aplicacao web/mobile que consome GraphQL")
+
+' Relacionamentos de comunicacao
+Rel(client, kongGateway, "Envia queries/mutations", "HTTPS + API Key")
+Rel(kongGateway, graphqlBff, "Roteia /graphql e balanceia instancias", "HTTP")
+Rel(graphqlBff, api1Chat, "sendMessageAndNotify, listMessagesByUser, listNotificationsByUser", "gRPC")
+Rel(api1Chat, api2Notification, "createNotification, listNotificationsByUser", "gRPC")
+
+SHOW_LEGEND()
+@enduml
