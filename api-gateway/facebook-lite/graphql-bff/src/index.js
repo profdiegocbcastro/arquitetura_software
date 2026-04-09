@@ -4,6 +4,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 import { ChatRepository } from "./repositories/chatRepository.js";
 import { ChatService } from "./services/chatService.js";
@@ -64,7 +65,12 @@ async function startServer() {
   const app = express();
   const port = Number(process.env.PORT ?? 4000);
 
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({
+    schema,
+    introspection: true,
+    plugins: [ApolloServerPluginLandingPageLocalDefault()],
+  });
+
   await server.start();
 
   app.get("/health", (_req, res) => {

@@ -18,33 +18,42 @@ services:
     connect_timeout: 3000
     read_timeout: 3000
     write_timeout: 3000
-    routes:
-      - name: graphql-route
-        paths:
-          - /graphql
-        strip_path: false
-        methods:
-          - GET
-          - POST
-          - OPTIONS
 
-plugins:
-  - name: key-auth
+routes:
+  - name: graphql-route
     service: graphql-bff-service
-    config:
-      key_names:
-        - apikey
-      key_in_header: true
-      key_in_query: false
-      hide_credentials: true
+    paths:
+      - /graphql
+    strip_path: false
+    methods:
+      - GET
+      - POST
+      - OPTIONS
+    plugins:
+      - name: key-auth
+        config:
+          key_names:
+            - apikey
+          key_in_header: true
+          key_in_query: false
+          hide_credentials: true
 
-  - name: rate-limiting
+      - name: rate-limiting
+        config:
+          policy: local
+          minute: 60
+
+  - name: graphql-dev-route
     service: graphql-bff-service
-    config:
-      policy: local
-      minute: 60
-
-consumers:
-  - username: aluno
-    keyauth_credentials:
-      - key: aula-arq-123
+    paths:
+      - /graphql-dev
+    strip_path: false
+    methods:
+      - GET
+      - POST
+      - OPTIONS
+    plugins:
+      - name: request-transformer
+        config:
+          replace:
+            uri: /graphql
