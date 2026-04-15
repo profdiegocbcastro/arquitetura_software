@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package adaptive;
+
+service AdaptiveDeliveryService {
+  rpc ResolveQuality(ResolveQualityRequest) returns (ResolveQualityResponse);
+}
+
+message ResolveQualityRequest {
+  string network_profile = 1;
+  int32 bandwidth_kbps = 2;
+}
+
+message ResolveQualityResponse {
+  string selected_quality = 1;
+  int32 selected_bitrate_kbps = 2;
+  string fallback_reason = 3;
+  string delivery_mode = 4;
+  string protocol = 5;
+}

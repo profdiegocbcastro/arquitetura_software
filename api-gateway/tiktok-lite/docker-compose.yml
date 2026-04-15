@@ -1,0 +1,103 @@
+services:
+  video-feed-service:
+    build:
+      context: .
+      dockerfile: services/video-feed-service/Dockerfile
+    container_name: video_feed_service
+    environment:
+      GRPC_PORT: 50053
+      PUBLIC_MEDIA_BASE_URL: http://localhost:4000/media
+    expose:
+      - "50053"
+
+  playback-service:
+    build:
+      context: .
+      dockerfile: services/playback-service/Dockerfile
+    container_name: playback_service
+    environment:
+      GRPC_PORT: 50051
+      MEDIA_PORT: 7000
+      ADAPTIVE_DELIVERY_GRPC_TARGET: adaptive-delivery-service:50052
+      VIDEO_FEED_GRPC_TARGET: video-feed-service:50053
+      RTMP_INGEST_URL: rtmp://localhost:1935/live
+    depends_on:
+      - video-feed-service
+      - adaptive-delivery-service
+      - rtmp-ingest
+    expose:
+      - "50051"
+      - "7000"
+
+  adaptive-delivery-service:
+    build:
+      context: .
+      dockerfile: services/adaptive-delivery-service/Dockerfile
+    container_name: adaptive_delivery_service
+    environment:
+      GRPC_PORT: 50052
+    expose:
+      - "50052"
+
+  graphql-bff-1:
+    build:
+      context: .
+      dockerfile: graphql-bff/Dockerfile
+    container_name: graphql_bff_1
+    environment:
+      INSTANCE_NAME: graphql-bff-1
+      PORT: 4000
+      VIDEO_FEED_GRPC_TARGET: video-feed-service:50053
+      PLAYBACK_GRPC_TARGET: playback-service:50051
+    depends_on:
+      - video-feed-service
+      - playback-service
+      - adaptive-delivery-service
+    expose:
+      - "4000"
+
+  graphql-bff-2:
+    build:
+      context: .
+      dockerfile: graphql-bff/Dockerfile
+    container_name: graphql_bff_2
+    environment:
+      INSTANCE_NAME: graphql-bff-2
+      PORT: 4000
+      VIDEO_FEED_GRPC_TARGET: video-feed-service:50053
+      PLAYBACK_GRPC_TARGET: playback-service:50051
+    depends_on:
+      - video-feed-service
+      - playback-service
+      - adaptive-delivery-service
+    expose:
+      - "4000"
+
+  load-balancer:
+    image: kong:3.7
+    container_name: tiktok_gateway
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: "off"
+    depends_on:
+      - graphql-bff-1
+      - graphql-bff-2
+      - playback-service
+    ports:
+      - "4000:8000"
+    volumes:
+      - ./load-balancer/kong.yml:/kong/declarative/kong.yml:ro
+
+  rtmp-ingest:
+    image: alfg/nginx-rtmp:latest
+    container_name: rtmp_ingest
+    ports:
+      - "1935:1935"
+      - "8080:8080"
+    volumes:
+      - ./rtmp-ingest/nginx.conf:/etc/nginx/nginx.conf:ro

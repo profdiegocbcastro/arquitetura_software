@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package videofeed;
+
+service VideoFeedService {
+  rpc ListFeed(ListFeedRequest) returns (ListFeedResponse);
+  rpc GetVideoById(GetVideoByIdRequest) returns (VideoDetails);
+}
+
+message ListFeedRequest {}
+
+message GetVideoByIdRequest {
+  string video_id = 1;
+}
+
+message VideoVariant {
+  string quality = 1;
+  int32 bitrate_kbps = 2;
+  string stream_url = 3;
+  string resolution = 4;
+}
+
+message FeedVideoCard {
+  string id = 1;
+  string title = 2;
+  string creator_name = 3;
+  string description = 4;
+  int32 duration_seconds = 5;
+  string thumbnail_url = 6;
+  repeated string available_qualities = 7;
+}
+
+message VideoDetails {
+  string id = 1;
+  string title = 2;
+  string creator_name = 3;
+  string description = 4;
+  int32 duration_seconds = 5;
+  string thumbnail_url = 6;
+  repeated string available_qualities = 7;
+  repeated VideoVariant available_variants = 8;
+}
+
+message ListFeedResponse {
+  repeated FeedVideoCard videos = 1;
+}

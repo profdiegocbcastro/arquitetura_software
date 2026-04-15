@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package playback;
+
+service PlaybackService {
+  rpc StartPlayback(StartPlaybackRequest) returns (PlaybackSession);
+  rpc GetIngestInfo(GetIngestInfoRequest) returns (IngestInfo);
+}
+
+message GetIngestInfoRequest {}
+
+message StartPlaybackRequest {
+  string video_id = 1;
+  string network_profile = 2;
+  int32 bandwidth_kbps = 3;
+}
+
+message VideoVariant {
+  string quality = 1;
+  int32 bitrate_kbps = 2;
+  string stream_url = 3;
+  string resolution = 4;
+}
+
+message PlaybackSession {
+  string video_id = 1;
+  string selected_quality = 2;
+  int32 selected_bitrate_kbps = 3;
+  string stream_url = 4;
+  string fallback_reason = 5;
+  string protocol = 6;
+  string delivery_mode = 7;
+  repeated VideoVariant available_variants = 8;
+}
+
+message IngestInfo {
+  string ingest_protocol = 1;
+  string ingest_url = 2;
+  string stream_key_pattern = 3;
+  string publish_flow = 4;
+  string notes = 5;
+}

@@ -1,0 +1,17 @@
+{
+  "name": "tiktok-lite-graphql-bff",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "@graphql-tools/schema": "^10.0.25",
+    "@grpc/grpc-js": "^1.14.1",
+    "@grpc/proto-loader": "^0.8.0",
+    "express": "^4.21.2",
+    "graphql": "^16.11.0"
+  }
+}

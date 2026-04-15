@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+
+title TikTok Lite - Container Diagram (Gateway + GraphQL + gRPC + RTMP + mídia adaptativa)
+
+System_Boundary(tiktokLite, "TikTok Lite (Exemplo de Aula)") {
+  Container(kongGateway, "Kong Gateway", "Kong", "Entrada pública. Expõe /graphql e /media, aplica auth, rate limit e roteamento")
+  Container(graphqlBff, "GraphQL BFF", "Node.js + Apollo Server", "API pública. Orquestra o feed e as decisões de playback")
+  Container(videoFeedService, "API 1 gRPC (Video Feed Service)", "Node.js + gRPC", "Lista o feed e mantém o catálogo de vídeos")
+  Container(playbackService, "API 2 gRPC (Playback Service)", "Node.js + gRPC + Express", "Resolve a sessão de reprodução e publica os arquivos de mídia")
+  Container(adaptiveService, "API 3 gRPC (Adaptive Delivery Service)", "Node.js + gRPC", "Decide a qualidade com base no perfil e na banda disponível")
+  Container(rtmpIngest, "RTMP Ingest", "NGINX RTMP", "Recebe publicação de vídeo em RTMP para simular o lado de ingestão")
+}
+
+Person(client, "Cliente", "Aplicação web/mobile que consome o feed e reproduz vídeos")
+Person(creator, "Criador", "Aplicação de upload ou encoder que publica em RTMP")
+
+Rel(client, kongGateway, "Envia queries/mutations e busca mídia", "HTTP + API Key")
+Rel(kongGateway, graphqlBff, "Roteia /graphql e balanceia instâncias", "HTTP")
+Rel(kongGateway, playbackService, "Roteia /media", "HTTP")
+Rel(graphqlBff, videoFeedService, "videoFeed", "gRPC")
+Rel(graphqlBff, playbackService, "playback, ingestInfo", "gRPC")
+Rel(playbackService, videoFeedService, "GetVideoById", "gRPC")
+Rel(playbackService, adaptiveService, "ResolveQuality", "gRPC")
+Rel(creator, rtmpIngest, "Publica stream de entrada", "RTMP")
+
+SHOW_LEGEND()
+@enduml

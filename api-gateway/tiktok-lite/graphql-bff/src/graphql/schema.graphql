@@ -1,0 +1,55 @@
+enum NetworkProfile {
+  LOW
+  MEDIUM
+  HIGH
+  AUTO
+}
+
+type ServiceInfo {
+  instanceName: String!
+  architecture: String!
+}
+
+type VideoVariant {
+  quality: String!
+  bitrateKbps: Int!
+  streamUrl: String!
+  resolution: String!
+}
+
+type PlaybackSession {
+  videoId: ID!
+  selectedQuality: String!
+  selectedBitrateKbps: Int!
+  streamUrl: String!
+  fallbackReason: String!
+  protocol: String!
+  deliveryMode: String!
+  availableVariants: [VideoVariant!]!
+}
+
+type FeedVideoCard {
+  id: ID!
+  title: String!
+  creatorName: String!
+  description: String!
+  durationSeconds: Int!
+  thumbnailUrl: String!
+  availableQualities: [String!]!
+  recommendedPlayback: PlaybackSession!
+}
+
+type IngestInfo {
+  ingestProtocol: String!
+  ingestUrl: String!
+  streamKeyPattern: String!
+  publishFlow: String!
+  notes: String!
+}
+
+type Query {
+  serviceInfo: ServiceInfo!
+  videoFeed(networkProfile: NetworkProfile = AUTO, bandwidthKbps: Int): [FeedVideoCard!]!
+  playback(videoId: ID!, networkProfile: NetworkProfile = AUTO, bandwidthKbps: Int): PlaybackSession!
+  ingestInfo: IngestInfo!
+}
