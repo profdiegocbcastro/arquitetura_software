@@ -17,7 +17,7 @@ Em vez de começar pensando em banco de dados, rotas HTTP, telas ou frameworks, 
 - quais operações não podem acontecer de forma inválida?
 - quais partes do sistema mudam por causa de decisões de negócio?
 
-No DDD, o código deve representar o negócio de forma clara. Se o sistema é sobre campeonato de futebol, termos como `Campeonato`, `Time`, `Rodada`, `Partida`, `Placar`, `Classificação` e `Rebaixamento` devem aparecer no domínio da aplicação, porque fazem parte da linguagem real do problema.
+No DDD, o código deve representar o negócio de forma clara. Se o sistema é sobre campeonato de futebol, termos como `Championship`, `Team`, `Round`, `Match`, `Score`, `Standings` e `Relegation` devem aparecer no domínio da aplicação, porque fazem parte da linguagem real do problema.
 
 ---
 
@@ -32,7 +32,7 @@ Regra de negócio:
 "Um time não pode jogar duas vezes na mesma rodada."
 
 No código:
-Rodada.adicionarPartida(partida)
+round.addMatch(match)
 ```
 
 Essa regra não deveria ficar escondida em uma tela, em um controller ou em uma query SQL. Ela pertence ao domínio, porque define como o campeonato funciona.
@@ -53,31 +53,31 @@ Em um sistema financeiro, o domínio pode envolver contas, saldo, lançamentos e
 
 É a linguagem compartilhada entre desenvolvedores e pessoas que entendem do negócio.
 
-Se o negócio chama algo de `Rodada`, o código também deve usar `Rodada`. Isso evita traduções confusas, como usar nomes técnicos que não existem para quem entende o problema.
+Se o negócio chama algo de `Round`, o código também deve usar `Round`. Isso evita traduções confusas, como usar nomes técnicos que não existem para quem entende o problema.
 
 ### Entidade
 
 É um objeto que possui identidade própria.
 
-Exemplo: um `Time` pode continuar sendo o mesmo time mesmo que mude alguns dados, como nome do técnico ou lista de jogadores.
+Exemplo: um `Team` pode continuar sendo o mesmo time mesmo que mude alguns dados, como nome do técnico ou lista de jogadores.
 
 ### Value Object
 
 É um objeto definido pelo seu valor, não por uma identidade.
 
-Exemplo: um `Placar` de `2x1` não precisa de um `id`. O que importa é o valor dos gols do mandante e do visitante.
+Exemplo: um `Score` de `2x1` não precisa de um `id`. O que importa é o valor dos gols do mandante e do visitante.
 
 ### Agregado
 
 É um conjunto de objetos do domínio que precisa manter regras de consistência em conjunto.
 
-Exemplo: `Campeonato` pode ser um agregado que controla times, rodadas e classificação. `Partida` pode ser outro agregado responsável por placar, eventos e encerramento.
+Exemplo: `Championship` pode ser um agregado que controla times, rodadas e classificação. `Match` pode ser outro agregado responsável por placar, eventos e encerramento.
 
 ### Serviço de domínio
 
 É usado quando uma regra de negócio não pertence naturalmente a uma única entidade ou value object.
 
-Exemplo: calcular uma tabela de classificação pode envolver várias partidas e vários times. Por isso pode fazer sentido existir um `ClassificacaoService` dentro do domínio.
+Exemplo: calcular uma tabela de classificação pode envolver várias partidas e vários times. Por isso pode fazer sentido existir um `StandingsService` dentro do domínio.
 
 ### Repositório
 
@@ -119,7 +119,7 @@ Ela recebe uma intenção do usuário ou do sistema, busca os dados necessários
 Exemplo:
 
 ```text
-RegistrarResultadoPartidaUseCase
+RegisterMatchResultUseCase
 ```
 
 Esse caso de uso pode carregar o campeonato, registrar o placar de uma partida e salvar o campeonato atualizado.
@@ -174,4 +174,4 @@ DDD pode ser exagerado quando o sistema é basicamente CRUD simples, com poucas 
 
 ## Exemplos
 
-- `campeonato-brasileiro`: simulação de campeonato com times, jogadores, rodadas, partidas, classificação, rebaixamento e Série B.
+- `brazilian-championship`: simulação de campeonato com teams, players, rounds, matches, standings, relegation e Série B.

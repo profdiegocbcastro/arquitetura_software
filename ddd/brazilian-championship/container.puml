@@ -1,0 +1,30 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+
+title Brazilian Championship - Container Diagram (DDD)
+
+' Main system
+System_Boundary(brazilianChampionship, "Brazilian Championship") {
+  Container(interfaceDemo, "Demo Interface", "Node.js / main.js", "Runs the simulation, builds the championship, and prints results")
+  Container(webApi, "Web API", "Node.js + Express", "Exposes REST CRUD for championships, teams, players, rounds, matches, events, and results")
+  Container(application, "Application Layer", "Use Cases", "Coordinates use cases such as building a championship and registering match results")
+  Container(domain, "Domain", "Entities, Value Objects, and Services", "Concentrates championship, match, round, standings, and relegation rules")
+  Container(repository, "In-memory Repository", "JavaScript", "Stores and retrieves championship data during execution")
+}
+
+' External actors
+Person(user, "User / Class", "Runs the example and observes the simulation")
+Person(client, "HTTP Client", "Consumes the REST endpoints")
+
+' Relationships
+Rel(user, interfaceDemo, "Runs")
+Rel(client, webApi, "Makes CRUD calls", "HTTP/JSON")
+Rel(interfaceDemo, application, "Triggers use cases")
+Rel(webApi, application, "Triggers use cases")
+Rel(application, domain, "Applies business rules")
+Rel(application, repository, "Loads and saves data")
+Rel(repository, domain, "Persists aggregates")
+
+SHOW_LEGEND()
+
+@enduml

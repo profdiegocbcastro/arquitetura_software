@@ -1,0 +1,14 @@
+{
+  "name": "ddd-brazilian-championship",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "start:web": "node src/infrastructure/web/server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

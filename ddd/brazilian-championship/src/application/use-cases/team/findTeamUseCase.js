@@ -1,0 +1,11 @@
+import { getChampionshipOrThrow } from "../shared/championshipLookup.js";
+
+export class FindTeamUseCase {
+  constructor(championshipRepository) {
+    this.championshipRepository = championshipRepository;
+  }
+
+  execute(championshipId, teamId) {
+    return getChampionshipOrThrow(this.championshipRepository, championshipId).findTeam(teamId);
+  }
+}
