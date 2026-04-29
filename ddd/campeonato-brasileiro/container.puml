@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+
+title Campeonato Brasileiro - Container Diagram (DDD)
+
+' Sistema principal do exemplo
+System_Boundary(campeonatoBrasileiro, "Campeonato Brasileiro") {
+  Container(interfaceDemo, "Interface de Demonstração", "Node.js / main.js", "Executa a simulacao, monta o campeonato e imprime os resultados")
+  Container(application, "Camada de Aplicação", "Use Cases", "Coordena casos de uso como montar campeonato e registrar resultado")
+  Container(domain, "Domínio", "Entidades, Value Objects e Serviços", "Concentra regras de campeonato, partida, rodada, classificacao e rebaixamento")
+  Container(repository, "Repositório em Memória", "JavaScript", "Armazena e recupera o campeonato durante a execucao")
+}
+
+' Ator externo
+Person(user, "Usuário / Aula", "Executa o exemplo e observa a simulacao")
+
+' Relacionamentos
+Rel(user, interfaceDemo, "Executa")
+Rel(interfaceDemo, application, "Aciona casos de uso")
+Rel(application, domain, "Aplica regras de negócio")
+Rel(application, repository, "Carrega e salva dados")
+Rel(repository, domain, "Persiste agregados")
+
+SHOW_LEGEND()
+
+@enduml
